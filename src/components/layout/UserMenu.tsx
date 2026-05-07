@@ -1,6 +1,6 @@
 "use client"
 
-import { LogOut, User } from "lucide-react"
+import { LogOut, User, Settings } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -48,6 +48,12 @@ export function UserMenu({ orgSlug, fullName, avatarUrl, userId }: Props) {
           <Link href={`/${orgSlug}/members/${userId}`} className="flex w-full items-center">
             <User className="mr-2 h-4 w-4" />
             Perfil
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="/account" className="flex w-full items-center">
+            <Settings className="mr-2 h-4 w-4" />
+            Minha conta
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />

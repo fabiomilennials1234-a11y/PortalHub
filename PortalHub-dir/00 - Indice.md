@@ -43,12 +43,12 @@ Plataforma onde criadores de conteudo criam comunidades pagas ou gratuitas com f
 
 ## Status Atual
 
-**Fase:** Sprints 0-6 entregues. Pronto pra Sprint 7 (final).
+**Fase:** ✅ MVP COMPLETO. Todas 8 sprints entregues.
 **Stack:** Next.js 16 + React 19 + Supabase + Stripe + Tailwind 4 + shadcn/ui (ADR-001).
 **MVP:** 8 sprints / 16 semanas / ~534h estimadas.
 **Agentes:** 3 configurados (Engenheiro, Dev Senior, Dev Pleno).
 **Decisoes:** 9 registradas em STATE.md (D001-D009). 1 ADR formal.
-**Proximo passo:** Sprint 7 — Polish + QA + Launch.
+**Proximo passo:** Launch — seguir [[10 - Operacional/Launch Checklist]].
 
 ---
 
