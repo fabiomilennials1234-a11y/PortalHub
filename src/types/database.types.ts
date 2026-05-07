@@ -362,6 +362,111 @@ export interface Database {
         }
         Update: Record<string, never>
       }
+      point_events: {
+        Row: {
+          id: string
+          user_id: string
+          org_id: string
+          action: string
+          points: number
+          reference_type: string | null
+          reference_id: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          org_id: string
+          action: string
+          points: number
+          reference_type?: string | null
+          reference_id?: string | null
+          created_at?: string
+        }
+        Update: Record<string, never>
+      }
+      levels: {
+        Row: {
+          id: string
+          org_id: string
+          level_number: number
+          name: string
+          min_points: number
+          icon: string | null
+          color: string | null
+          perks: Json
+        }
+        Insert: {
+          id?: string
+          org_id: string
+          level_number: number
+          name: string
+          min_points: number
+          icon?: string | null
+          color?: string | null
+          perks?: Json
+        }
+        Update: {
+          name?: string
+          min_points?: number
+          icon?: string | null
+          color?: string | null
+          perks?: Json
+        }
+      }
+      achievements: {
+        Row: {
+          id: string
+          org_id: string
+          name: string
+          description: string | null
+          type: "milestone" | "streak" | "special"
+          criteria: Json
+          badge_url: string | null
+          icon: string | null
+          color: string | null
+          points_reward: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          org_id: string
+          name: string
+          description?: string | null
+          type: "milestone" | "streak" | "special"
+          criteria: Json
+          badge_url?: string | null
+          icon?: string | null
+          color?: string | null
+          points_reward?: number
+          created_at?: string
+        }
+        Update: {
+          name?: string
+          description?: string | null
+          type?: "milestone" | "streak" | "special"
+          criteria?: Json
+          badge_url?: string | null
+          icon?: string | null
+          color?: string | null
+          points_reward?: number
+        }
+      }
+      user_achievements: {
+        Row: {
+          id: string
+          user_id: string
+          achievement_id: string
+          earned_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          achievement_id: string
+          earned_at?: string
+        }
+        Update: Record<string, never>
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>
@@ -381,3 +486,7 @@ export type Module = Database["public"]["Tables"]["modules"]["Row"]
 export type Lesson = Database["public"]["Tables"]["lessons"]["Row"]
 export type Enrollment = Database["public"]["Tables"]["enrollments"]["Row"]
 export type LessonCompletion = Database["public"]["Tables"]["lesson_completions"]["Row"]
+export type PointEvent = Database["public"]["Tables"]["point_events"]["Row"]
+export type Level = Database["public"]["Tables"]["levels"]["Row"]
+export type Achievement = Database["public"]["Tables"]["achievements"]["Row"]
+export type UserAchievement = Database["public"]["Tables"]["user_achievements"]["Row"]
