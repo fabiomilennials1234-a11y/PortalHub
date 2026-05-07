@@ -3,6 +3,8 @@ import { notFound } from "next/navigation"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ProfileGameSection } from "./ProfileGameSection"
 
 interface Props {
   params: Promise<{ orgSlug: string; userId: string }>
@@ -59,40 +61,55 @@ export default async function ProfilePage({ params }: Props) {
             {profile.full_name ?? "Sem nome"}
           </h1>
           {membership && (
-            <div className="flex items-center gap-2">
-              <Badge variant="secondary" className="capitalize">
-                {membership.role}
-              </Badge>
-              <span className="text-sm text-muted-foreground">
-                Nível {membership.level} · {membership.points} pts
-              </span>
-            </div>
+            <Badge variant="secondary" className="capitalize">
+              {membership.role}
+            </Badge>
           )}
         </div>
       </div>
 
-      <Separator />
-
       {profile.bio && (
-        <div className="space-y-2">
-          <h2 className="text-sm font-semibold text-muted-foreground">Bio</h2>
-          <p className="text-sm">{profile.bio}</p>
-        </div>
+        <>
+          <Separator />
+          <div className="space-y-2">
+            <h2 className="text-sm font-semibold text-muted-foreground">
+              Bio
+            </h2>
+            <p className="text-sm">{profile.bio}</p>
+          </div>
+        </>
+      )}
+
+      {org && membership && (
+        <>
+          <Separator />
+          <Tabs defaultValue="stats" className="space-y-4">
+            <TabsList>
+              <TabsTrigger value="stats">Estatísticas</TabsTrigger>
+              <TabsTrigger value="achievements">Conquistas</TabsTrigger>
+              <TabsTrigger value="activity">Atividade</TabsTrigger>
+            </TabsList>
+            <ProfileGameSection orgId={org.id} userId={userId} />
+          </Tabs>
+        </>
       )}
 
       {membership && (
-        <div className="space-y-2">
-          <h2 className="text-sm font-semibold text-muted-foreground">
-            Membro desde
-          </h2>
-          <p className="text-sm">
-            {new Date(membership.joined_at).toLocaleDateString("pt-BR", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
-        </div>
+        <>
+          <Separator />
+          <div className="space-y-2">
+            <h2 className="text-sm font-semibold text-muted-foreground">
+              Membro desde
+            </h2>
+            <p className="text-sm">
+              {new Date(membership.joined_at).toLocaleDateString("pt-BR", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+          </div>
+        </>
       )}
     </div>
   )
