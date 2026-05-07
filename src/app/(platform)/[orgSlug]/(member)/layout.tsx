@@ -8,7 +8,7 @@ interface Props {
   params: Promise<{ orgSlug: string }>
 }
 
-export default async function OrgLayout({ children, params }: Props) {
+export default async function MemberLayout({ children, params }: Props) {
   const { orgSlug } = await params
   const supabase = await createClient()
 
@@ -17,30 +17,36 @@ export default async function OrgLayout({ children, params }: Props) {
   } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
+  // Fetch org first (needed for membership lookup by org_id)
   const { data: org } = await supabase
     .from("organizations")
-    .select("*")
+    .select("id, name, slug, logo_url")
     .eq("slug", orgSlug)
     .single()
 
   if (!org) notFound()
 
-  const { data: membership } = await supabase
-    .from("memberships")
-    .select("role, status")
-    .eq("user_id", user.id)
-    .eq("org_id", org.id)
-    .single()
+  // Parallelize membership + profile fetches
+  const [membershipRes, profileRes] = await Promise.all([
+    supabase
+      .from("memberships")
+      .select("role, status")
+      .eq("user_id", user.id)
+      .eq("org_id", org.id)
+      .single(),
+    supabase
+      .from("profiles")
+      .select("full_name, avatar_url")
+      .eq("id", user.id)
+      .single(),
+  ])
+
+  const membership = membershipRes.data
+  const profile = profileRes.data
 
   if (!membership || membership.status !== "active") {
     redirect(`/${orgSlug}/join`)
   }
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("full_name, avatar_url")
-    .eq("id", user.id)
-    .single()
 
   return (
     <div className="flex min-h-dvh">
