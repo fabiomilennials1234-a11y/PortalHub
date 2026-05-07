@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -19,6 +20,7 @@ function slugify(text: string): string {
 }
 
 export function CreateOrgForm() {
+  const router = useRouter()
   const [name, setName] = useState("")
   const [slug, setSlug] = useState("")
   const [slugManual, setSlugManual] = useState(false)
@@ -33,9 +35,23 @@ export function CreateOrgForm() {
   async function handleSubmit(formData: FormData) {
     setPending(true)
     setError(null)
-    const result = await createOrganization(formData)
-    if (result?.error) {
-      setError(result.error)
+    try {
+      const result = await createOrganization(formData)
+      if (result?.error) {
+        setError(result.error)
+        setPending(false)
+        return
+      }
+      if (result?.data?.slug) {
+        router.push(`/${result.data.slug}/community`)
+        router.refresh()
+        return
+      }
+      setPending(false)
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Erro inesperado ao criar org",
+      )
       setPending(false)
     }
   }

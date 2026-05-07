@@ -2,7 +2,6 @@
 
 import { createClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
 import { z } from "zod"
 
 const createOrgSchema = z.object({
@@ -55,10 +54,16 @@ export async function createOrganization(formData: FormData) {
     org_id: org.id,
     role: "owner",
   })
-  if (memberError) return { error: memberError.message }
+  if (memberError) {
+    // Rollback org so user isn't left with org but no membership (stuck org)
+    await supabase.from("organizations").delete().eq("id", org.id)
+    return {
+      error: `Não foi possível criar membership: ${memberError.message}`,
+    }
+  }
 
   revalidatePath("/", "layout")
-  redirect(`/${org.slug}/community`)
+  return { data: { slug: org.slug } }
 }
 
 export async function updateOrganization(formData: FormData) {

@@ -158,16 +158,42 @@ export default async function Home() {
     .eq("status", "active")
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-16">
-      <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight">
+    <div className="mx-auto max-w-3xl px-4 py-12">
+      <header className="mb-6 space-y-2">
+        <h1 className="font-heading text-2xl font-bold tracking-tight">
           Suas comunidades
         </h1>
-        <Link href="/new" className={buttonVariants({ size: "sm" })}>
-          <Plus className="mr-1.5 h-4 w-4" />
-          Nova comunidade
+        <p className="text-sm text-muted-foreground">
+          Comunidades das quais você faz parte.
+        </p>
+      </header>
+
+      <nav className="mb-6 flex gap-2 border-b border-border">
+        <Link
+          href="/"
+          className="border-b-2 border-primary px-3 py-2 text-sm font-medium"
+        >
+          Minhas
         </Link>
-      </div>
+        <Link
+          href="/discover"
+          className="px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+        >
+          Descobrir
+        </Link>
+        <Link
+          href="/new"
+          className={buttonVariants({
+            size: "sm",
+            variant: "outline",
+            className: "ml-auto mb-2",
+          })}
+        >
+          <Plus className="size-4" />
+          Nova
+        </Link>
+      </nav>
+
       {!memberships?.length ? (
         <div className="rounded-lg border p-8 text-center">
           <p className="text-muted-foreground">
