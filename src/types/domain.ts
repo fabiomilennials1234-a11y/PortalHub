@@ -29,6 +29,49 @@ export interface OrgSettings {
   }
 }
 
+export type ReactionType = "like" | "love" | "insightful" | "fire"
+
+export interface PostWithAuthor {
+  id: string
+  org_id: string
+  author_id: string
+  category_id: string | null
+  title: string
+  body: unknown
+  pinned: boolean
+  locked: boolean
+  published: boolean
+  likes_count: number
+  comments_count: number
+  created_at: string
+  updated_at: string
+  profiles: {
+    full_name: string | null
+    avatar_url: string | null
+  }
+  categories: {
+    name: string
+    slug: string
+    color: string
+  } | null
+}
+
+export interface CommentWithAuthor {
+  id: string
+  post_id: string
+  author_id: string
+  parent_id: string | null
+  body: unknown
+  likes_count: number
+  created_at: string
+  updated_at: string
+  profiles: {
+    full_name: string | null
+    avatar_url: string | null
+  }
+  children?: CommentWithAuthor[]
+}
+
 export interface MemberWithProfile {
   id: string
   user_id: string

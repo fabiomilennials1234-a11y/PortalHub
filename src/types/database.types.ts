@@ -103,6 +103,120 @@ export interface Database {
           updated_at?: string
         }
       }
+      categories: {
+        Row: {
+          id: string
+          org_id: string
+          name: string
+          slug: string
+          color: string
+          position: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          org_id: string
+          name: string
+          slug: string
+          color?: string
+          position?: number
+          created_at?: string
+        }
+        Update: {
+          name?: string
+          slug?: string
+          color?: string
+          position?: number
+        }
+      }
+      posts: {
+        Row: {
+          id: string
+          org_id: string
+          author_id: string
+          category_id: string | null
+          title: string
+          body: Json
+          pinned: boolean
+          locked: boolean
+          published: boolean
+          likes_count: number
+          comments_count: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          org_id: string
+          author_id: string
+          category_id?: string | null
+          title: string
+          body: Json
+          pinned?: boolean
+          locked?: boolean
+          published?: boolean
+          likes_count?: number
+          comments_count?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string | null
+          title?: string
+          body?: Json
+          pinned?: boolean
+          locked?: boolean
+          published?: boolean
+          updated_at?: string
+        }
+      }
+      comments: {
+        Row: {
+          id: string
+          post_id: string
+          author_id: string
+          parent_id: string | null
+          body: Json
+          likes_count: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          post_id: string
+          author_id: string
+          parent_id?: string | null
+          body: Json
+          likes_count?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          body?: Json
+          updated_at?: string
+        }
+      }
+      reactions: {
+        Row: {
+          id: string
+          user_id: string
+          target_type: "post" | "comment"
+          target_id: string
+          reaction_type: "like" | "love" | "insightful" | "fire"
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          target_type: "post" | "comment"
+          target_id: string
+          reaction_type: "like" | "love" | "insightful" | "fire"
+          created_at?: string
+        }
+        Update: {
+          reaction_type?: "like" | "love" | "insightful" | "fire"
+        }
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>
@@ -113,3 +227,7 @@ export interface Database {
 export type Profile = Database["public"]["Tables"]["profiles"]["Row"]
 export type Organization = Database["public"]["Tables"]["organizations"]["Row"]
 export type Membership = Database["public"]["Tables"]["memberships"]["Row"]
+export type Category = Database["public"]["Tables"]["categories"]["Row"]
+export type Post = Database["public"]["Tables"]["posts"]["Row"]
+export type Comment = Database["public"]["Tables"]["comments"]["Row"]
+export type Reaction = Database["public"]["Tables"]["reactions"]["Row"]
