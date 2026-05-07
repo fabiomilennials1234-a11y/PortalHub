@@ -217,6 +217,151 @@ export interface Database {
           reaction_type?: "like" | "love" | "insightful" | "fire"
         }
       }
+      courses: {
+        Row: {
+          id: string
+          org_id: string
+          author_id: string
+          title: string
+          slug: string
+          description: string | null
+          thumbnail_url: string | null
+          status: "draft" | "published" | "archived"
+          access_type: "free" | "paid" | "level_locked"
+          required_level: number | null
+          position: number
+          total_lessons: number
+          total_duration_seconds: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          org_id: string
+          author_id: string
+          title: string
+          slug: string
+          description?: string | null
+          thumbnail_url?: string | null
+          status?: "draft" | "published" | "archived"
+          access_type?: "free" | "paid" | "level_locked"
+          required_level?: number | null
+          position?: number
+          total_lessons?: number
+          total_duration_seconds?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          title?: string
+          slug?: string
+          description?: string | null
+          thumbnail_url?: string | null
+          status?: "draft" | "published" | "archived"
+          access_type?: "free" | "paid" | "level_locked"
+          required_level?: number | null
+          position?: number
+          updated_at?: string
+        }
+      }
+      modules: {
+        Row: {
+          id: string
+          course_id: string
+          title: string
+          description: string | null
+          position: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          course_id: string
+          title: string
+          description?: string | null
+          position?: number
+          created_at?: string
+        }
+        Update: {
+          title?: string
+          description?: string | null
+          position?: number
+        }
+      }
+      lessons: {
+        Row: {
+          id: string
+          module_id: string
+          title: string
+          description: string | null
+          content_type: "video" | "text" | "embed"
+          video_url: string | null
+          text_content: Json | null
+          duration_seconds: number
+          position: number
+          is_free_preview: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          module_id: string
+          title: string
+          description?: string | null
+          content_type?: "video" | "text" | "embed"
+          video_url?: string | null
+          text_content?: Json | null
+          duration_seconds?: number
+          position?: number
+          is_free_preview?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          title?: string
+          description?: string | null
+          content_type?: "video" | "text" | "embed"
+          video_url?: string | null
+          text_content?: Json | null
+          duration_seconds?: number
+          position?: number
+          is_free_preview?: boolean
+          updated_at?: string
+        }
+      }
+      enrollments: {
+        Row: {
+          id: string
+          user_id: string
+          course_id: string
+          enrolled_at: string
+          completed_at: string | null
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          course_id: string
+          enrolled_at?: string
+          completed_at?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+        }
+      }
+      lesson_completions: {
+        Row: {
+          id: string
+          user_id: string
+          lesson_id: string
+          completed_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          lesson_id: string
+          completed_at?: string
+        }
+        Update: Record<string, never>
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>
@@ -231,3 +376,8 @@ export type Category = Database["public"]["Tables"]["categories"]["Row"]
 export type Post = Database["public"]["Tables"]["posts"]["Row"]
 export type Comment = Database["public"]["Tables"]["comments"]["Row"]
 export type Reaction = Database["public"]["Tables"]["reactions"]["Row"]
+export type Course = Database["public"]["Tables"]["courses"]["Row"]
+export type Module = Database["public"]["Tables"]["modules"]["Row"]
+export type Lesson = Database["public"]["Tables"]["lessons"]["Row"]
+export type Enrollment = Database["public"]["Tables"]["enrollments"]["Row"]
+export type LessonCompletion = Database["public"]["Tables"]["lesson_completions"]["Row"]
