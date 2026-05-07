@@ -2,11 +2,11 @@
 
 import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { ImageUpload } from "@/components/shared/ImageUpload"
 import { updateProfile } from "@/actions/profile"
 import { Save, Loader2, Check } from "lucide-react"
 
@@ -15,16 +15,6 @@ interface ProfileFormProps {
   initialFullName: string
   initialBio: string
   initialAvatarUrl: string
-}
-
-function getInitials(name: string): string {
-  if (!name) return "?"
-  return name
-    .split(" ")
-    .slice(0, 2)
-    .map((n: string) => n[0])
-    .join("")
-    .toUpperCase()
 }
 
 export function ProfileForm({
@@ -56,32 +46,17 @@ export function ProfileForm({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Avatar className="size-16">
-          {avatarUrl && <AvatarImage src={avatarUrl} />}
-          <AvatarFallback className="text-lg">
-            {getInitials(fullName)}
-          </AvatarFallback>
-        </Avatar>
-        <div className="space-y-1">
-          <p className="text-sm font-medium">Foto de perfil</p>
-          <p className="text-xs text-muted-foreground">
-            Cole uma URL pública de imagem.
-          </p>
-        </div>
-      </div>
-
       <div className="space-y-2">
-        <Label htmlFor="avatar">URL da foto</Label>
-        <Input
-          id="avatar"
-          type="url"
-          value={avatarUrl}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setAvatarUrl(e.target.value)
-          }
-          placeholder="https://..."
-        />
+        <Label>Foto de perfil</Label>
+        <div className="max-w-[200px]">
+          <ImageUpload
+            bucket="avatars"
+            value={avatarUrl}
+            onChange={(url) => setAvatarUrl(url ?? "")}
+            aspectRatio="square"
+            label="Avatar"
+          />
+        </div>
       </div>
 
       <div className="space-y-2">
