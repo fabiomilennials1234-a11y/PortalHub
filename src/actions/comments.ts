@@ -31,6 +31,19 @@ export async function createComment(formData: FormData) {
     return { error: "Conteúdo inválido" }
   }
 
+  // Enforce max nesting depth of 2 (top-level + 1 reply level)
+  if (parsed.data.parent_id) {
+    const { data: parent } = await supabase
+      .from("comments")
+      .select("parent_id")
+      .eq("id", parsed.data.parent_id)
+      .single()
+
+    if (parent?.parent_id) {
+      return { error: "Comentários permitem no máximo 2 níveis de aninhamento" }
+    }
+  }
+
   const { data, error } = await supabase
     .from("comments")
     .insert({

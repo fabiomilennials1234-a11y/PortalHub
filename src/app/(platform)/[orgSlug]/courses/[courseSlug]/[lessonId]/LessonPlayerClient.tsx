@@ -63,11 +63,20 @@ export function LessonPlayerClient({
     }
   })
 
+  const isPreviewWithoutEnrollment = !isEnrolled && lesson.is_free_preview
+
   return (
     <div className="flex h-[calc(100dvh-3.5rem)] -m-6">
       {/* Main content */}
       <div className="flex flex-1 flex-col overflow-y-auto">
         <div className="mx-auto w-full max-w-4xl space-y-6 p-6">
+          {isPreviewWithoutEnrollment && (
+            <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3 text-xs text-amber-700 dark:text-amber-400">
+              👀 Você está vendo uma aula gratuita. Inscreva-se no curso pra
+              acessar todas as aulas e marcar progresso.
+            </div>
+          )}
+
           <LessonContent lesson={lesson} />
 
           <div className="space-y-2">

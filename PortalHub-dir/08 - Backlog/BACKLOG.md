@@ -14,23 +14,25 @@ Bugs encontrados em smoke + features a adicionar pos-launch v1.0.
 
 ### Alta prioridade
 
-- [ ] **B001** — Storage upload nao implementado
-  - Avatar/banner/cover URL hoje sao input de URL externa
-  - Adicionar upload via Supabase Storage com bucket `avatars`, `banners`, `covers`
-  - Server action helper + componente `<ImageUpload>` reutilizavel
+- [x] **B001** — Storage upload (✅ 2026-05-08)
+  - 3 buckets criados (avatars 5MB, banners/covers 10MB) com RLS path-based
+  - Server action `uploadImage`/`removeImage` + componente `<ImageUpload>`
+  - Integrado em ProfileForm
 
-- [ ] **B002** — Free preview lessons sem enrollment nao renderizam
-  - RLS policy "Members can view free preview lessons" requer JOIN modules+courses+memberships
-  - Validar fluxo: user nao-enrolled abre lesson com is_free_preview=true → deve ver conteudo
-  - Adicionar test E2E
+- [x] **B002** — Free preview lessons (✅ 2026-05-08)
+  - Validado via REST: member non-enrolled CONSEGUE ver lesson com is_free_preview=true
+  - Adicionado banner amarelo "Inscreva-se pra ver mais aulas" no LessonPlayerClient
+  - 4 testes em bugfixes.test.ts cobrem cenarios
 
-- [ ] **B003** — Comments aninhados level > 2
-  - UI bloqueia reply em level 2, mas DB nao bloqueia
-  - Adicionar CHECK constraint ou validacao em createComment action
+- [x] **B003** — Comments max depth 2 (✅ 2026-05-08)
+  - Validacao client em createComment action (return error)
+  - Trigger DB `enforce_comment_max_depth` (defesa em profundidade, ERRCODE 23514)
+  - 3 testes em bugfixes.test.ts
 
-- [ ] **B004** — Email de magic link nao chega em prod
-  - Local funciona via Mailpit. Prod precisa Resend ou SES configurado no Supabase Auth
-  - Documentar em Launch Checklist
+- [x] **B004** — Email magic link em prod (✅ 2026-05-08)
+  - Launch Checklist seção 2.1 SMTP Resend (host, port, user, password, sender)
+  - Seção 2.2 templates customizados com URLs de callback
+  - Smoke test list incluido
 
 ### Media prioridade
 
