@@ -467,6 +467,148 @@ export interface Database {
         }
         Update: Record<string, never>
       }
+      plans: {
+        Row: {
+          id: string
+          org_id: string
+          name: string
+          description: string | null
+          price_cents: number
+          currency: string
+          interval: "month" | "year"
+          stripe_product_id: string | null
+          stripe_price_id: string | null
+          features: Json
+          active: boolean
+          position: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          org_id: string
+          name: string
+          description?: string | null
+          price_cents: number
+          currency?: string
+          interval?: "month" | "year"
+          stripe_product_id?: string | null
+          stripe_price_id?: string | null
+          features?: Json
+          active?: boolean
+          position?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          name?: string
+          description?: string | null
+          price_cents?: number
+          currency?: string
+          interval?: "month" | "year"
+          stripe_product_id?: string | null
+          stripe_price_id?: string | null
+          features?: Json
+          active?: boolean
+          position?: number
+          updated_at?: string
+        }
+      }
+      subscriptions: {
+        Row: {
+          id: string
+          user_id: string
+          org_id: string
+          plan_id: string | null
+          status:
+            | "incomplete"
+            | "active"
+            | "past_due"
+            | "canceled"
+            | "unpaid"
+            | "trialing"
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          current_period_start: string | null
+          current_period_end: string | null
+          cancel_at_period_end: boolean
+          canceled_at: string | null
+          trial_end: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          org_id: string
+          plan_id?: string | null
+          status?:
+            | "incomplete"
+            | "active"
+            | "past_due"
+            | "canceled"
+            | "unpaid"
+            | "trialing"
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          current_period_start?: string | null
+          current_period_end?: string | null
+          cancel_at_period_end?: boolean
+          canceled_at?: string | null
+          trial_end?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          plan_id?: string | null
+          status?:
+            | "incomplete"
+            | "active"
+            | "past_due"
+            | "canceled"
+            | "unpaid"
+            | "trialing"
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          current_period_start?: string | null
+          current_period_end?: string | null
+          cancel_at_period_end?: boolean
+          canceled_at?: string | null
+          trial_end?: string | null
+          updated_at?: string
+        }
+      }
+      payments: {
+        Row: {
+          id: string
+          user_id: string
+          org_id: string
+          subscription_id: string | null
+          stripe_invoice_id: string | null
+          stripe_payment_intent_id: string | null
+          amount_cents: number
+          currency: string
+          status: "succeeded" | "failed" | "pending" | "refunded"
+          invoice_url: string | null
+          paid_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          org_id: string
+          subscription_id?: string | null
+          stripe_invoice_id?: string | null
+          stripe_payment_intent_id?: string | null
+          amount_cents: number
+          currency?: string
+          status: "succeeded" | "failed" | "pending" | "refunded"
+          invoice_url?: string | null
+          paid_at?: string | null
+          created_at?: string
+        }
+        Update: Record<string, never>
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>
@@ -490,3 +632,6 @@ export type PointEvent = Database["public"]["Tables"]["point_events"]["Row"]
 export type Level = Database["public"]["Tables"]["levels"]["Row"]
 export type Achievement = Database["public"]["Tables"]["achievements"]["Row"]
 export type UserAchievement = Database["public"]["Tables"]["user_achievements"]["Row"]
+export type Plan = Database["public"]["Tables"]["plans"]["Row"]
+export type Subscription = Database["public"]["Tables"]["subscriptions"]["Row"]
+export type Payment = Database["public"]["Tables"]["payments"]["Row"]
