@@ -16,7 +16,7 @@ status: vivo
 | 1 | 3-4 | Auth + Profiles + Orgs | Entregue (2026-05-07) |
 | 2 | 5-6 | Community Feed | Entregue (2026-05-07) |
 | 3 | 7-8 | Courses | Entregue (2026-05-07) |
-| 4 | 9-10 | Gamificacao | Nao iniciado |
+| 4 | 9-10 | Gamificacao | Entregue (2026-05-07) |
 | 5 | 11-12 | Payments + Subscriptions | Nao iniciado |
 | 6 | 13-14 | Events + Notifications + Moderation | Nao iniciado |
 | 7 | 15-16 | Polish + QA + Launch | Nao iniciado |
