@@ -86,7 +86,7 @@ export default async function CourseDetailPage({ params }: Props) {
   }))
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
+    <div className="mx-auto w-full max-w-4xl space-y-8">
       {/* Hero */}
       <div className="relative overflow-hidden rounded-xl">
         {course.thumbnail_url ? (

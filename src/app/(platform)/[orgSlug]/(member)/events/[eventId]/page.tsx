@@ -80,7 +80,7 @@ export default async function EventDetailPage({ params }: Props) {
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="mx-auto w-full max-w-3xl space-y-6">
       <div className="relative overflow-hidden rounded-xl">
         {event.cover_url ? (
           <div className="relative aspect-[21/9]">

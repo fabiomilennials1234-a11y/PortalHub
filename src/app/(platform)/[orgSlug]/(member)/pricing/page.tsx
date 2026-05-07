@@ -21,7 +21,7 @@ export default async function PricingPage({ params }: Props) {
   if (!org) notFound()
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <div className="mx-auto w-full max-w-6xl space-y-8">
       <div className="space-y-2 text-center">
         <h1 className="font-heading text-2xl font-bold">Planos</h1>
         <p className="text-sm text-muted-foreground">

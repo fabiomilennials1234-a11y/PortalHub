@@ -26,7 +26,7 @@ export default async function CommunityPage({ params }: Props) {
     .order("position", { ascending: true })
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="mx-auto w-full max-w-3xl space-y-6">
       <h1 className="font-heading text-lg font-semibold">Comunidade</h1>
       <PostList
         orgId={org.id}

@@ -22,7 +22,7 @@ export default async function LeaderboardPage({ params }: Props) {
   if (!org) return null
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="mx-auto w-full max-w-3xl space-y-6">
       <h1 className="font-heading text-lg font-semibold">Leaderboard</h1>
 
       <Tabs defaultValue="ranking" className="space-y-4">

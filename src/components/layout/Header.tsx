@@ -22,7 +22,7 @@ export function Header({
   userId,
 }: Props) {
   return (
-    <header className="flex h-14 items-center justify-between border-b px-4">
+    <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background/80 px-4 backdrop-blur sm:px-6">
       <div className="flex items-center gap-3">
         <MobileNav
           orgSlug={orgSlug}
