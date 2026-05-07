@@ -39,7 +39,7 @@ export function Sidebar({ orgSlug, orgName, orgLogoUrl, userRole }: Props) {
   const items = isAdmin ? [...NAV_ITEMS, ...ADMIN_ITEMS] : NAV_ITEMS
 
   return (
-    <aside className="hidden w-64 shrink-0 border-r bg-card lg:block">
+    <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 border-r bg-card lg:block xl:w-72">
       <div className="flex h-full flex-col">
         <div className="flex h-14 items-center gap-3 border-b px-4">
           {orgLogoUrl ? (

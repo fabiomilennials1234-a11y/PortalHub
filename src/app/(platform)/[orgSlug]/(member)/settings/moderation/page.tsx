@@ -40,7 +40,7 @@ export default async function ModerationPage({ params }: Props) {
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="mx-auto w-full max-w-3xl space-y-6">
       <div className="space-y-1">
         <h1 className="font-heading text-lg font-semibold">Moderação</h1>
         <p className="text-xs text-muted-foreground">

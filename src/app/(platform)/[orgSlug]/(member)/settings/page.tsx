@@ -37,7 +37,7 @@ export default async function SettingsPage({ params }: Props) {
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="mx-auto w-full max-w-3xl space-y-6">
       <h1 className="text-2xl font-bold tracking-tight">Configurações</h1>
       <OrgSettingsForm org={org} />
     </div>

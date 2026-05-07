@@ -59,7 +59,7 @@ export default async function PostDetailPage({ params }: Props) {
   const category = post.categories as { name: string; slug: string; color: string } | null
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="mx-auto w-full max-w-3xl space-y-6">
       <article className="space-y-4">
         <div className="flex items-center gap-3">
           <Avatar>
