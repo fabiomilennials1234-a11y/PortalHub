@@ -1,9 +1,53 @@
 import { createClient } from "@/lib/supabase/server"
 import Link from "next/link"
 import Image from "next/image"
+import {
+  Plus,
+  MessageSquare,
+  BookOpen,
+  Trophy,
+  Calendar,
+  Sparkles,
+  Lock,
+  Shield,
+  ArrowRight,
+} from "lucide-react"
 import { APP_NAME } from "@/lib/constants"
 import { buttonVariants } from "@/components/ui/button"
-import { Plus } from "lucide-react"
+import { cn } from "@/lib/utils"
+
+const FEATURES = [
+  {
+    icon: MessageSquare,
+    title: "Feed da comunidade",
+    body: "Posts em rich text, comentários aninhados e reações pra conversas que importam.",
+  },
+  {
+    icon: BookOpen,
+    title: "Cursos online",
+    body: "Aulas em vídeo, texto e progresso por aluno. YouTube, Vimeo e Loom embedados.",
+  },
+  {
+    icon: Trophy,
+    title: "Gamificação nativa",
+    body: "Pontos, níveis, conquistas e leaderboard. Engagement loop pronto.",
+  },
+  {
+    icon: Calendar,
+    title: "Eventos ao vivo",
+    body: "Crie eventos com RSVP, lembretes e links direto pro Zoom ou Discord.",
+  },
+  {
+    icon: Sparkles,
+    title: "Pagamentos integrados",
+    body: "Stripe Checkout + Billing Portal. Cobrança recorrente sem fricção.",
+  },
+  {
+    icon: Shield,
+    title: "Multi-tenant seguro",
+    body: "RLS no banco, isolamento por organização. Sua comunidade é só sua.",
+  },
+]
 
 export default async function Home() {
   const supabase = await createClient()
@@ -13,19 +57,85 @@ export default async function Home() {
 
   if (!user) {
     return (
-      <div className="flex min-h-dvh flex-col items-center justify-center gap-6">
-        <h1 className="text-4xl font-bold tracking-tight">{APP_NAME}</h1>
-        <p className="text-muted-foreground">
-          Plataforma all-in-one de comunidades e cursos online
-        </p>
-        <div className="flex gap-3">
-          <Link href="/login" className={buttonVariants()}>
-            Entrar
-          </Link>
-          <Link href="/signup" className={buttonVariants({ variant: "outline" })}>
-            Criar conta
-          </Link>
-        </div>
+      <div className="min-h-dvh">
+        <section className="relative overflow-hidden border-b border-border">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-background" />
+          <div className="relative mx-auto max-w-5xl px-4 py-20 text-center">
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/60 px-3 py-1 text-xs text-muted-foreground backdrop-blur">
+              <Sparkles className="size-3 text-amber-400" />
+              Plataforma all-in-one para criadores
+            </div>
+            <h1 className="mt-6 font-heading text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+              Comunidades + Cursos.
+              <br />
+              <span className="bg-gradient-to-r from-primary to-rose-400 bg-clip-text text-transparent">
+                Tudo num só lugar.
+              </span>
+            </h1>
+            <p className="mx-auto mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg">
+              {APP_NAME} substitui Discord + Hotmart + Zoom com uma experiência
+              unificada. Comunidade, cursos, eventos, pagamentos e gamificação
+              — prontos pra você lançar.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <Link href="/signup" className={buttonVariants({ size: "lg" })}>
+                Começar grátis
+                <ArrowRight className="size-4" />
+              </Link>
+              <Link
+                href="/login"
+                className={buttonVariants({ variant: "outline", size: "lg" })}
+              >
+                Entrar
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-5xl px-4 py-20">
+          <h2 className="font-heading text-center text-2xl font-bold sm:text-3xl">
+            Tudo o que sua comunidade precisa
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-center text-sm text-muted-foreground">
+            Construído pra criadores que pensam em décadas, não em sprints.
+          </p>
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {FEATURES.map((f) => (
+              <div
+                key={f.title}
+                className="group rounded-xl border border-border bg-card/50 p-5 transition-colors hover:bg-card"
+              >
+                <div className="inline-flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <f.icon className="size-5" />
+                </div>
+                <h3 className="mt-4 font-heading text-base font-semibold">
+                  {f.title}
+                </h3>
+                <p className="mt-1 text-sm text-muted-foreground">{f.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="border-t border-border">
+          <div className="mx-auto max-w-3xl px-4 py-20 text-center">
+            <Lock className="mx-auto size-8 text-muted-foreground" />
+            <h2 className="mt-4 font-heading text-2xl font-bold sm:text-3xl">
+              Pronto pra construir sua comunidade?
+            </h2>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Sem cartão de crédito pra começar. Faça login, crie sua org e
+              comece em minutos.
+            </p>
+            <Link
+              href="/signup"
+              className={cn(buttonVariants({ size: "lg" }), "mt-6")}
+            >
+              Criar minha conta
+              <ArrowRight className="size-4" />
+            </Link>
+          </div>
+        </section>
       </div>
     )
   }
