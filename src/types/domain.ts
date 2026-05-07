@@ -220,3 +220,57 @@ export interface UserStats {
   rank: number | null
   achievements_count: number
 }
+
+// ── Payments ──
+
+export type PlanInterval = "month" | "year"
+export type SubscriptionStatus =
+  | "incomplete"
+  | "active"
+  | "past_due"
+  | "canceled"
+  | "unpaid"
+  | "trialing"
+export type PaymentStatus = "succeeded" | "failed" | "pending" | "refunded"
+
+export interface PlanFeature {
+  label: string
+  included: boolean
+}
+
+export interface PlanWithFeatures {
+  id: string
+  org_id: string
+  name: string
+  description: string | null
+  price_cents: number
+  currency: string
+  interval: PlanInterval
+  stripe_price_id: string | null
+  features: PlanFeature[]
+  active: boolean
+  position: number
+  created_at: string
+  updated_at: string
+}
+
+export interface SubscriptionWithPlan {
+  id: string
+  user_id: string
+  org_id: string
+  plan_id: string | null
+  status: SubscriptionStatus
+  stripe_customer_id: string | null
+  stripe_subscription_id: string | null
+  current_period_start: string | null
+  current_period_end: string | null
+  cancel_at_period_end: boolean
+  canceled_at: string | null
+  trial_end: string | null
+  plan: {
+    name: string
+    price_cents: number
+    currency: string
+    interval: PlanInterval
+  } | null
+}
