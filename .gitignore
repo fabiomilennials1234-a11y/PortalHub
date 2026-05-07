@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build
+dist/
+build/
+out/
+.next/
+.vercel
+*.exe
+*.dll
+*.so
+*.dylib
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Obsidian
+PortalHub-dir/.obsidian/workspace.json
+PortalHub-dir/.obsidian/workspace-mobile.json
+
+# Logs
+*.log
+logs/
+
+# Coverage
+coverage/
+*.cover
+*.out
+
+# Testing
+playwright-report/
+test-results/
+blob-report/
+
+# Supabase
+supabase/.temp/
+supabase/.branches/

@@ -1,0 +1,2 @@
+-- PortalHub seed data
+-- Add development seed data here after Sprint 1 migrations
