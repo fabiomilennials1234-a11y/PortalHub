@@ -13,7 +13,7 @@ status: vivo
 | Sprint | Semanas | Foco | Status |
 |--------|---------|------|--------|
 | 0 | 1-2 | Foundation + Design System | Entregue (2026-05-07) |
-| 1 | 3-4 | Auth + Profiles + Orgs | Nao iniciado |
+| 1 | 3-4 | Auth + Profiles + Orgs | Entregue (2026-05-07) |
 | 2 | 5-6 | Community Feed | Nao iniciado |
 | 3 | 7-8 | Courses | Nao iniciado |
 | 4 | 9-10 | Gamificacao | Nao iniciado |

@@ -31,3 +31,4 @@ Nenhum blocker ativo.
 - **2026-05-07**: Proximo passo: Sprint 0 (Foundation).
 - **2026-05-07**: D002 revisada: foco em rodar MVP 100% local com Docker. Sem deploy cloud no MVP.
 - **2026-05-07**: Sprint 0 entregue. Next.js 16.2.5 + React 19 + Tailwind 4 + shadcn/ui (base-nova). 15 componentes UI. Supabase clients. Providers (Theme+Query+Tooltip). Middleware. Vitest+Playwright config. CI GitHub Actions. Folder structure completa. Smoke test passing. Build 0 erros.
+- **2026-05-07**: Sprint 1 entregue. Auth (email/password, magic link, Google OAuth). Profiles (auto-create trigger). Organizations (CRUD, slug). Memberships (join/leave/role). RLS 3 tabelas (9 policies). Middleware auth guard. Platform layout (Sidebar, Header, UserMenu, MobileNav). Members page. Profile page. Org settings. 13 rotas. 10 tests passing. Build 0 erros, lint 0 warnings.
