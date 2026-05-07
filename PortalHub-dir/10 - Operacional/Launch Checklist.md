@@ -25,6 +25,36 @@ Checklist pra colocar PortalHub em produção. Revisado a cada release.
 - [ ] URLs de redirect adicionadas em Auth → URL Configuration
 - [ ] Rate limiting de signups habilitado
 
+### 2.1 SMTP de produção (Resend) — OBRIGATÓRIO
+
+Sem SMTP custom, Supabase usa SMTP free de teste com **rate limit de 4 emails/hora** + sender genérico. Para produção:
+
+1. Criar conta Resend (https://resend.com) + API key
+2. Verificar domínio em Resend (DNS SPF + DKIM)
+3. No Supabase Dashboard → Project Settings → Auth → SMTP Settings:
+   - **Host:** `smtp.resend.com`
+   - **Port:** `465` (SSL) ou `587` (STARTTLS)
+   - **User:** `resend`
+   - **Password:** `<RESEND_API_KEY>`
+   - **Sender email:** `noreply@<seu-dominio>`
+   - **Sender name:** `PortalHub`
+4. Auth → Email Templates: customizar branding
+5. Smoke test:
+   - Signup → email chega
+   - Magic link → link funciona
+   - Reset password → template OK
+
+### 2.2 Templates de email customizados
+
+Em Supabase Dashboard → Auth → Email Templates customizar:
+
+- **Confirm signup:** `{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=signup`
+- **Magic link:** `{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=magiclink`
+- **Reset password:** `{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=recovery`
+- **Invite user:** `{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=invite`
+
+Branding mínimo: logo, nome PortalHub, footer com link de unsubscribe (legal LGPD/CAN-SPAM).
+
 ## 3. Stripe
 
 - [ ] Webhook endpoint configurado: `https://<APP>/api/stripe/webhook`
