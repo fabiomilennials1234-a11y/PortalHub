@@ -3,6 +3,8 @@ export type MembershipStatus = "active" | "banned" | "pending"
 export type PostType = "discussion" | "question" | "announcement"
 export type CourseStatus = "draft" | "published" | "archived"
 export type LessonType = "video" | "text" | "quiz"
+export type CourseAccessType = "free" | "paid" | "level_locked"
+export type LessonContentType = "video" | "text" | "embed"
 export type EventStatus = "upcoming" | "live" | "ended" | "cancelled"
 export type SubscriptionTier = "free" | "paid"
 export type NotificationType =
@@ -86,4 +88,72 @@ export interface MemberWithProfile {
     avatar_url: string | null
     bio: string | null
   }
+}
+
+export interface CourseWithAuthor {
+  id: string
+  org_id: string
+  author_id: string
+  title: string
+  slug: string
+  description: string | null
+  thumbnail_url: string | null
+  status: CourseStatus
+  access_type: CourseAccessType
+  required_level: number | null
+  position: number
+  total_lessons: number
+  total_duration_seconds: number
+  created_at: string
+  updated_at: string
+  profiles: {
+    full_name: string | null
+    avatar_url: string | null
+  }
+}
+
+export interface ModuleWithLessons {
+  id: string
+  course_id: string
+  title: string
+  description: string | null
+  position: number
+  created_at: string
+  lessons: LessonSummary[]
+}
+
+export interface LessonSummary {
+  id: string
+  module_id: string
+  title: string
+  description: string | null
+  content_type: LessonContentType
+  duration_seconds: number
+  position: number
+  is_free_preview: boolean
+}
+
+export interface LessonFull {
+  id: string
+  module_id: string
+  title: string
+  description: string | null
+  content_type: LessonContentType
+  video_url: string | null
+  text_content: unknown
+  duration_seconds: number
+  position: number
+  is_free_preview: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface LessonWithProgress extends LessonSummary {
+  completed: boolean
+}
+
+export interface ModuleWithProgress extends Omit<ModuleWithLessons, "lessons"> {
+  lessons: LessonWithProgress[]
+  completed_count: number
+  total_count: number
 }
