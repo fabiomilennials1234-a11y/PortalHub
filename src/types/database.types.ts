@@ -609,6 +609,157 @@ export interface Database {
         }
         Update: Record<string, never>
       }
+      events: {
+        Row: {
+          id: string
+          org_id: string
+          host_id: string
+          title: string
+          description: string | null
+          cover_url: string | null
+          status: "upcoming" | "live" | "ended" | "cancelled"
+          starts_at: string
+          ends_at: string
+          location_url: string | null
+          location_label: string | null
+          max_attendees: number | null
+          attendees_count: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          org_id: string
+          host_id: string
+          title: string
+          description?: string | null
+          cover_url?: string | null
+          status?: "upcoming" | "live" | "ended" | "cancelled"
+          starts_at: string
+          ends_at: string
+          location_url?: string | null
+          location_label?: string | null
+          max_attendees?: number | null
+          attendees_count?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          title?: string
+          description?: string | null
+          cover_url?: string | null
+          status?: "upcoming" | "live" | "ended" | "cancelled"
+          starts_at?: string
+          ends_at?: string
+          location_url?: string | null
+          location_label?: string | null
+          max_attendees?: number | null
+          updated_at?: string
+        }
+      }
+      event_registrations: {
+        Row: {
+          id: string
+          event_id: string
+          user_id: string
+          registered_at: string
+          attended: boolean
+        }
+        Insert: {
+          id?: string
+          event_id: string
+          user_id: string
+          registered_at?: string
+          attended?: boolean
+        }
+        Update: {
+          attended?: boolean
+        }
+      }
+      notifications: {
+        Row: {
+          id: string
+          user_id: string
+          org_id: string | null
+          actor_id: string | null
+          type: string
+          title: string
+          body: string | null
+          action_url: string | null
+          reference_type: string | null
+          reference_id: string | null
+          read: boolean
+          read_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          org_id?: string | null
+          actor_id?: string | null
+          type: string
+          title: string
+          body?: string | null
+          action_url?: string | null
+          reference_type?: string | null
+          reference_id?: string | null
+          read?: boolean
+          read_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          read?: boolean
+          read_at?: string | null
+        }
+      }
+      reports: {
+        Row: {
+          id: string
+          org_id: string
+          reporter_id: string
+          target_type: "post" | "comment" | "user"
+          target_id: string
+          reason:
+            | "spam"
+            | "harassment"
+            | "hate_speech"
+            | "inappropriate"
+            | "misinformation"
+            | "other"
+          description: string | null
+          status: "pending" | "reviewing" | "resolved" | "dismissed"
+          resolved_by: string | null
+          resolution_note: string | null
+          created_at: string
+          resolved_at: string | null
+        }
+        Insert: {
+          id?: string
+          org_id: string
+          reporter_id: string
+          target_type: "post" | "comment" | "user"
+          target_id: string
+          reason:
+            | "spam"
+            | "harassment"
+            | "hate_speech"
+            | "inappropriate"
+            | "misinformation"
+            | "other"
+          description?: string | null
+          status?: "pending" | "reviewing" | "resolved" | "dismissed"
+          resolved_by?: string | null
+          resolution_note?: string | null
+          created_at?: string
+          resolved_at?: string | null
+        }
+        Update: {
+          status?: "pending" | "reviewing" | "resolved" | "dismissed"
+          resolved_by?: string | null
+          resolution_note?: string | null
+          resolved_at?: string | null
+        }
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>
@@ -635,3 +786,7 @@ export type UserAchievement = Database["public"]["Tables"]["user_achievements"][
 export type Plan = Database["public"]["Tables"]["plans"]["Row"]
 export type Subscription = Database["public"]["Tables"]["subscriptions"]["Row"]
 export type Payment = Database["public"]["Tables"]["payments"]["Row"]
+export type Event = Database["public"]["Tables"]["events"]["Row"]
+export type EventRegistration = Database["public"]["Tables"]["event_registrations"]["Row"]
+export type Notification = Database["public"]["Tables"]["notifications"]["Row"]
+export type Report = Database["public"]["Tables"]["reports"]["Row"]
