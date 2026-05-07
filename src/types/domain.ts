@@ -157,3 +157,66 @@ export interface ModuleWithProgress extends Omit<ModuleWithLessons, "lessons"> {
   completed_count: number
   total_count: number
 }
+
+// ── Gamification ──
+
+export type AchievementType = "milestone" | "streak" | "special"
+export type PointAction =
+  | "post_created"
+  | "comment_created"
+  | "lesson_completed"
+  | "reaction_given"
+  | "daily_login"
+  | "achievement_earned"
+
+export interface LeaderboardEntry {
+  user_id: string
+  org_id: string
+  points: number
+  level: number
+  rank: number
+  profile: {
+    full_name: string | null
+    avatar_url: string | null
+  }
+}
+
+export interface AchievementWithEarned {
+  id: string
+  org_id: string
+  name: string
+  description: string | null
+  type: AchievementType
+  criteria: unknown
+  badge_url: string | null
+  icon: string | null
+  color: string | null
+  points_reward: number
+  created_at: string
+  earned: boolean
+  earned_at: string | null
+}
+
+export interface ActivityEntry {
+  id: string
+  user_id: string
+  org_id: string
+  action: PointAction | string
+  points: number
+  reference_type: string | null
+  reference_id: string | null
+  created_at: string
+  profile: {
+    full_name: string | null
+    avatar_url: string | null
+  }
+}
+
+export interface UserStats {
+  points: number
+  level: number
+  level_name: string
+  next_level_points: number | null
+  rank: number | null
+  achievements_count: number
+}
