@@ -1,5 +1,6 @@
 import { UserMenu } from "./UserMenu"
 import { MobileNav } from "./MobileNav"
+import { NotificationBell } from "@/components/notifications/NotificationBell"
 
 interface Props {
   orgSlug: string
@@ -30,12 +31,15 @@ export function Header({
           userRole={userRole}
         />
       </div>
-      <UserMenu
-        orgSlug={orgSlug}
-        fullName={fullName}
-        avatarUrl={avatarUrl}
-        userId={userId}
-      />
+      <div className="flex items-center gap-2">
+        <NotificationBell />
+        <UserMenu
+          orgSlug={orgSlug}
+          fullName={fullName}
+          avatarUrl={avatarUrl}
+          userId={userId}
+        />
+      </div>
     </header>
   )
 }
