@@ -274,3 +274,78 @@ export interface SubscriptionWithPlan {
     interval: PlanInterval
   } | null
 }
+
+// ── Events ──
+
+export interface EventWithHost {
+  id: string
+  org_id: string
+  host_id: string
+  title: string
+  description: string | null
+  cover_url: string | null
+  status: EventStatus
+  starts_at: string
+  ends_at: string
+  location_url: string | null
+  location_label: string | null
+  max_attendees: number | null
+  attendees_count: number
+  host: {
+    full_name: string | null
+    avatar_url: string | null
+  }
+}
+
+// ── Reports ──
+
+export type ReportTargetType = "post" | "comment" | "user"
+export type ReportReason =
+  | "spam"
+  | "harassment"
+  | "hate_speech"
+  | "inappropriate"
+  | "misinformation"
+  | "other"
+export type ReportStatus = "pending" | "reviewing" | "resolved" | "dismissed"
+
+export interface ReportWithReporter {
+  id: string
+  org_id: string
+  reporter_id: string
+  target_type: ReportTargetType
+  target_id: string
+  reason: ReportReason
+  description: string | null
+  status: ReportStatus
+  resolved_by: string | null
+  resolution_note: string | null
+  created_at: string
+  resolved_at: string | null
+  reporter: {
+    full_name: string | null
+    avatar_url: string | null
+  }
+}
+
+// ── Notifications ──
+
+export interface NotificationWithActor {
+  id: string
+  user_id: string
+  org_id: string | null
+  actor_id: string | null
+  type: string
+  title: string
+  body: string | null
+  action_url: string | null
+  reference_type: string | null
+  reference_id: string | null
+  read: boolean
+  read_at: string | null
+  created_at: string
+  actor: {
+    full_name: string | null
+    avatar_url: string | null
+  } | null
+}
