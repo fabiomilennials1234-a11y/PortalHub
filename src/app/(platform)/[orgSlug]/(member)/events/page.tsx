@@ -70,7 +70,7 @@ export default async function EventsPage({ params }: Props) {
     .toLowerCase()
 
   return (
-    <div className="mx-auto w-full max-w-7xl space-y-8">
+    <div className="space-y-8">
       <header className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-6">
         <div className="space-y-2">
           <p className="wf-mono">Agenda da comunidade</p>

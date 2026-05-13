@@ -77,7 +77,7 @@ export default async function EventDetailPage({ params }: Props) {
         : "wf-pill"
 
   return (
-    <article className="mx-auto w-full max-w-7xl space-y-8">
+    <article className="space-y-8">
       <div className="relative overflow-hidden rounded-md border border-line">
         {event.cover_url ? (
           <div className="relative aspect-[21/9]">

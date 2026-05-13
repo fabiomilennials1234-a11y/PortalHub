@@ -51,7 +51,7 @@ export default async function MembersPage({ params }: Props) {
   const total = members?.length ?? 0
 
   return (
-    <div className="mx-auto w-full max-w-7xl space-y-8 py-2">
+    <div className="space-y-8 py-2">
       <header className="flex items-end justify-between gap-4">
         <div className="space-y-2">
           <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-mid">

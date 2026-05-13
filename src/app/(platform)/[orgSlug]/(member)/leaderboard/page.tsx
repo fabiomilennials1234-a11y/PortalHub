@@ -23,7 +23,7 @@ export default async function LeaderboardPage({ params }: Props) {
   if (!org) return null
 
   return (
-    <div className="mx-auto w-full max-w-7xl space-y-8 py-2">
+    <div className="space-y-8 py-2">
       {/* Header */}
       <header className="space-y-2">
         <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-mid">

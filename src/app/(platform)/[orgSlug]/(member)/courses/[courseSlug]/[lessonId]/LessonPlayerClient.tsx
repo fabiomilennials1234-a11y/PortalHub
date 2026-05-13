@@ -106,7 +106,7 @@ export function LessonPlayerClient({
     <div className="flex h-[calc(100dvh-3.5rem)] -m-6">
       {/* Main content */}
       <div className="flex flex-1 flex-col overflow-y-auto">
-        <div className="mx-auto w-full max-w-7xl space-y-6 p-8">
+        <div className="space-y-6 p-8">
           {/* Breadcrumb back */}
           <Link
             href={basePath}

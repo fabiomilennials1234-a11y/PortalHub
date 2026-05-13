@@ -39,7 +39,7 @@ export default async function DiscoverPage() {
   const otherOrgs = allOrgs.filter((o) => !myOrgIds.has(o.id))
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-12">
+    <div className="px-4 py-12">
       <header className="mb-8 space-y-2">
         <h1 className="font-heading text-2xl font-bold tracking-tight">
           Descobrir comunidades

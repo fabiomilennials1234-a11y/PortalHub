@@ -27,7 +27,7 @@ export default async function BillingPage({ params }: Props) {
   if (!org) notFound()
 
   return (
-    <div className="mx-auto w-full max-w-7xl space-y-8">
+    <div className="space-y-8">
       <header className="space-y-2 border-b border-line pb-6">
         <p className="wf-mono">Faturamento · Stripe</p>
         <h1 className="font-serif text-[32px] font-semibold leading-none tracking-tight text-foreground">
