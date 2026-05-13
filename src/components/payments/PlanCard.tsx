@@ -1,9 +1,7 @@
 "use client"
 
 import { useTransition } from "react"
-import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Check, X, Loader2 } from "lucide-react"
 import { formatPrice } from "@/lib/stripe/format"
 import { createCheckoutSession } from "@/actions/payments"
@@ -40,60 +38,73 @@ export function PlanCard({
   const features = Array.isArray(plan.features)
     ? (plan.features as PlanFeature[])
     : []
-  const intervalLabel = plan.interval === "year" ? "/ano" : "/mês"
+
+  // Format price for editorial display: split currency and amount
+  const formatted = formatPrice(plan.price_cents, plan.currency)
+  const intervalCaps = plan.interval === "year" ? "ANO" : "MÊS"
+  const currencyCaps = plan.currency.toUpperCase()
 
   return (
-    <Card
+    <div
       className={cn(
-        "flex flex-col",
-        highlighted && "ring-2 ring-primary",
+        "wf-box wf-box--hover relative flex flex-col p-6 transition-colors",
+        highlighted && "border-2 border-foreground",
       )}
     >
-      <CardContent className="flex flex-1 flex-col gap-4 py-5">
-        <div className="space-y-1">
-          <div className="flex items-center justify-between">
-            <h3 className="font-heading text-base font-semibold">
-              {plan.name}
-            </h3>
-            {highlighted && <Badge>Recomendado</Badge>}
-          </div>
-          {plan.description && (
-            <p className="text-xs text-muted-foreground">{plan.description}</p>
-          )}
-        </div>
+      {highlighted && (
+        <span className="wf-pill wf-pill--gold absolute -top-3 right-6 text-[10px] uppercase tracking-[0.08em]">
+          Mais popular
+        </span>
+      )}
 
-        <div className="space-y-0.5">
-          <div className="flex items-baseline gap-1">
-            <span className="font-heading text-2xl font-bold tabular-nums">
-              {formatPrice(plan.price_cents, plan.currency)}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              {intervalLabel}
-            </span>
-          </div>
-        </div>
+      <div className="space-y-1">
+        <h3 className="font-serif text-[22px] font-semibold leading-tight text-foreground">
+          {plan.name}
+        </h3>
+        <p className="wf-mono">Por {intervalCaps.toLowerCase()}</p>
+      </div>
 
-        <ul className="flex-1 space-y-1.5 text-xs">
-          {features.map((f, idx) => (
-            <li key={idx} className="flex items-center gap-2">
-              {f.included ? (
-                <Check className="size-3.5 text-emerald-500" />
-              ) : (
-                <X className="size-3.5 text-muted-foreground" />
+      {plan.description && (
+        <p className="mt-3 text-[13px] leading-snug text-ink-mid">
+          {plan.description}
+        </p>
+      )}
+
+      <div className="mt-6 flex items-baseline gap-2">
+        <span className="font-serif text-[48px] font-semibold leading-none tabular-nums tracking-tight text-foreground">
+          {formatted}
+        </span>
+        <span className="font-mono text-[11px] uppercase tracking-[0.06em] text-ink-mid">
+          {currencyCaps} / {intervalCaps.toLowerCase()}
+        </span>
+      </div>
+
+      <ul className="mt-6 flex-1 space-y-2.5">
+        {features.map((f, idx) => (
+          <li
+            key={idx}
+            className="flex items-start gap-2.5 text-[13px] leading-snug"
+          >
+            {f.included ? (
+              <Check className="mt-0.5 size-3.5 shrink-0 text-gold-dk" />
+            ) : (
+              <X className="mt-0.5 size-3.5 shrink-0 text-ink-low" />
+            )}
+            <span
+              className={cn(
+                "text-foreground",
+                !f.included && "text-ink-low line-through",
               )}
-              <span
-                className={cn(
-                  !f.included && "text-muted-foreground line-through",
-                )}
-              >
-                {f.label}
-              </span>
-            </li>
-          ))}
-        </ul>
+            >
+              {f.label}
+            </span>
+          </li>
+        ))}
+      </ul>
 
+      <div className="mt-6">
         {isCurrent ? (
-          <Button variant="secondary" disabled>
+          <Button variant="outline" disabled className="w-full">
             Plano atual
           </Button>
         ) : (
@@ -101,12 +112,13 @@ export function PlanCard({
             variant={highlighted ? "default" : "outline"}
             onClick={handleCheckout}
             disabled={isPending || !plan.stripe_price_id}
+            className="w-full"
           >
             {isPending && <Loader2 className="size-4 animate-spin" />}
             {plan.stripe_price_id ? "Assinar" : "Indisponível"}
           </Button>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

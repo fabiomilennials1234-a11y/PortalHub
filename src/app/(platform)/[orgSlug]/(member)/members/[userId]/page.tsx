@@ -1,13 +1,37 @@
 import { createClient } from "@/lib/supabase/server"
 import { notFound } from "next/navigation"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { GradientAvatar } from "@/components/shared/GradientAvatar"
+import { LevelBadge } from "@/components/gamification/LevelBadge"
 import { ProfileGameSection } from "./ProfileGameSection"
 
 interface Props {
   params: Promise<{ orgSlug: string; userId: string }>
+}
+
+const ROLE_LABEL: Record<string, string> = {
+  owner: "Owner",
+  admin: "Admin",
+  moderator: "Moderador",
+  member: "Membro",
+}
+
+interface StatCellProps {
+  value: string | number
+  label: string
+}
+
+function StatCell({ value, label }: StatCellProps) {
+  return (
+    <div className="wf-box p-3 text-center">
+      <p className="font-serif text-[26px] font-semibold leading-none tabular-nums text-foreground">
+        {value}
+      </p>
+      <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-ink-mid">
+        {label}
+      </p>
+    </div>
+  )
 }
 
 export default async function ProfilePage({ params }: Props) {
@@ -37,79 +61,151 @@ export default async function ProfilePage({ params }: Props) {
         .single()
     : { data: null }
 
-  const initials = profile.full_name
-    ? profile.full_name
-        .split(" ")
-        .map((n: string) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2)
-    : "?"
+  // Counts + gamification signals run in parallel. Failures fall back gracefully.
+  const [postsRes, commentsRes, coursesRes, streakRes, rankRes] = org
+    ? await Promise.all([
+        supabase
+          .from("posts")
+          .select("id", { count: "exact", head: true })
+          .eq("org_id", org.id)
+          .eq("author_id", userId)
+          .eq("published", true),
+        supabase
+          .from("comments")
+          .select("id", { count: "exact", head: true })
+          .eq("author_id", userId),
+        supabase
+          .from("enrollments")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", userId)
+          .not("completed_at", "is", null),
+        supabase.rpc("calculate_user_streak", {
+          target_user_id: userId,
+          target_org_id: org.id,
+          target_timezone: "America/Sao_Paulo",
+        }),
+        supabase
+          .from("user_weekly_ranking")
+          .select("rank")
+          .eq("org_id", org.id)
+          .eq("user_id", userId)
+          .maybeSingle(),
+      ])
+    : [
+        { count: 0 },
+        { count: 0 },
+        { count: 0 },
+        { data: null as number | null },
+        { data: null as { rank: number } | null },
+      ]
+
+  const postsCount = postsRes.count ?? 0
+  const commentsCount = commentsRes.count ?? 0
+  const coursesCount = coursesRes.count ?? 0
+
+  const streak: number =
+    typeof (streakRes as { data?: unknown }).data === "number"
+      ? ((streakRes as { data: number }).data ?? 0)
+      : 0
+  const weeklyRank: number | null =
+    (rankRes as { data?: { rank?: number } | null }).data?.rank ?? null
+
+  const roleLabel = membership ? ROLE_LABEL[membership.role] ?? membership.role : null
+
+  const memberSince = membership
+    ? new Date(membership.joined_at).toLocaleDateString("pt-BR", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : null
 
   return (
-    <div className="mx-auto w-full max-w-3xl space-y-6">
-      <div className="flex items-center gap-6">
-        <Avatar className="h-20 w-20">
-          <AvatarImage
-            src={profile.avatar_url ?? undefined}
-            alt={profile.full_name ?? ""}
+    <div className="space-y-8 py-2">
+      {/* Header */}
+      <header className="space-y-5">
+        <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-6">
+          <GradientAvatar
+            userId={userId}
+            name={profile.full_name}
+            avatarUrl={profile.avatar_url}
+            size={96}
+            ringClassName="ring-1 ring-line"
           />
-          <AvatarFallback className="text-2xl">{initials}</AvatarFallback>
-        </Avatar>
-        <div className="space-y-1">
-          <h1 className="text-2xl font-bold tracking-tight">
-            {profile.full_name ?? "Sem nome"}
-          </h1>
-          {membership && (
-            <Badge variant="secondary" className="capitalize">
-              {membership.role}
-            </Badge>
-          )}
-        </div>
-      </div>
-
-      {profile.bio && (
-        <>
-          <Separator />
-          <div className="space-y-2">
-            <h2 className="text-sm font-semibold text-muted-foreground">
-              Bio
-            </h2>
-            <p className="text-sm">{profile.bio}</p>
+          <div className="min-w-0 flex-1 space-y-2">
+            <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-mid">
+              perfil
+            </p>
+            <h1 className="font-serif text-[32px] font-semibold leading-tight tracking-[-0.015em] text-foreground">
+              {profile.full_name ?? "Sem nome"}
+            </h1>
+            {membership && (
+              <>
+                <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-ink-mid tabular-nums">
+                  <span>{roleLabel}</span>
+                  <span className="mx-2 text-ink-low">·</span>
+                  <span>{membership.points.toLocaleString("pt-BR")} creditos</span>
+                </p>
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  <LevelBadge level={membership.level} />
+                  {weeklyRank !== null && weeklyRank <= 5 && (
+                    <span className="wf-pill wf-pill--gold !text-[11px]">
+                      Top {weeklyRank} da semana
+                    </span>
+                  )}
+                  {streak >= 2 && (
+                    <span className="wf-pill wf-pill--gold !text-[11px]">
+                      {streak} dias de sequência
+                    </span>
+                  )}
+                </div>
+              </>
+            )}
           </div>
-        </>
-      )}
+        </div>
+
+        {profile.bio && (
+          <p className="max-w-2xl font-serif text-[16px] italic leading-relaxed tracking-[-0.005em] text-ink-soft">
+            {profile.bio}
+          </p>
+        )}
+
+        {membership && (
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <StatCell
+              value={membership.points.toLocaleString("pt-BR")}
+              label="creditos"
+            />
+            <StatCell value={postsCount} label="posts" />
+            <StatCell value={commentsCount} label="respostas" />
+            <StatCell value={coursesCount} label="cursos feitos" />
+          </div>
+        )}
+
+        {memberSince && (
+          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.08em] text-ink-low">
+            <span>membro desde</span>
+            <span className="text-ink-mid">{memberSince}</span>
+          </div>
+        )}
+      </header>
+
+      <div className="h-px w-full bg-line" />
 
       {org && membership && (
-        <>
-          <Separator />
-          <Tabs defaultValue="stats" className="space-y-4">
-            <TabsList>
-              <TabsTrigger value="stats">Estatísticas</TabsTrigger>
-              <TabsTrigger value="achievements">Conquistas</TabsTrigger>
-              <TabsTrigger value="activity">Atividade</TabsTrigger>
-            </TabsList>
-            <ProfileGameSection orgId={org.id} userId={userId} />
-          </Tabs>
-        </>
-      )}
-
-      {membership && (
-        <>
-          <Separator />
-          <div className="space-y-2">
-            <h2 className="text-sm font-semibold text-muted-foreground">
-              Membro desde
-            </h2>
-            <p className="text-sm">
-              {new Date(membership.joined_at).toLocaleDateString("pt-BR", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
-          </div>
-        </>
+        <Tabs defaultValue="posts" className="space-y-6">
+          <TabsList>
+            <TabsTrigger value="posts">Posts</TabsTrigger>
+            <TabsTrigger value="comments">Respostas</TabsTrigger>
+            <TabsTrigger value="courses">Cursos</TabsTrigger>
+            <TabsTrigger value="badges">Badges</TabsTrigger>
+          </TabsList>
+          <ProfileGameSection
+            orgId={org.id}
+            orgSlug={orgSlug}
+            userId={userId}
+          />
+        </Tabs>
       )}
     </div>
   )

@@ -17,14 +17,16 @@ export function LessonContent({ lesson }: LessonContentProps) {
   }
 
   if (lesson.content_type === "text" && lesson.text_content) {
-    return <RichTextRenderer content={lesson.text_content} />
+    return (
+      <div className="wf-box bg-paper p-6">
+        <RichTextRenderer content={lesson.text_content} />
+      </div>
+    )
   }
 
   return (
-    <div className="flex aspect-video items-center justify-center rounded-lg bg-muted">
-      <p className="text-sm text-muted-foreground">
-        Conteúdo não disponível
-      </p>
+    <div className="wf-box flex aspect-video items-center justify-center bg-paper-2">
+      <span className="wf-mono !text-ink-mid">CONTEÚDO INDISPONÍVEL</span>
     </div>
   )
 }

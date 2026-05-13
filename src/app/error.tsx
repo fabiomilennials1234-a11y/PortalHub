@@ -2,7 +2,6 @@
 
 import { useEffect } from "react"
 import Link from "next/link"
-import { AlertTriangle } from "lucide-react"
 import { Button, buttonVariants } from "@/components/ui/button"
 
 interface Props {
@@ -16,26 +15,28 @@ export default function GlobalError({ error, reset }: Props) {
   }, [error])
 
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center gap-6 px-4 text-center">
-      <AlertTriangle className="size-12 text-amber-500" />
-      <div className="space-y-2">
-        <h1 className="font-heading text-2xl font-bold">
-          Algo deu errado
+    <div className="flex min-h-dvh flex-col items-center justify-center gap-8 px-6 text-center">
+      <div className="space-y-4">
+        <h1 className="font-serif text-[88px] font-semibold leading-none tracking-tight text-gold-dk sm:text-[120px]">
+          500
         </h1>
-        <p className="max-w-md text-sm text-muted-foreground">
-          Encontramos um erro inesperado. Tente novamente ou volte para a
-          página inicial.
+        <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-ink-mid">
+          Algo deu errado
+        </p>
+        <p className="mx-auto max-w-md font-serif text-[18px] leading-snug text-ink-soft">
+          Encontramos um erro inesperado. Tente novamente, ou volte para o
+          início.
         </p>
         {error.digest && (
-          <p className="font-mono text-[10px] text-muted-foreground/60">
+          <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-low">
             ref: {error.digest}
           </p>
         )}
       </div>
-      <div className="flex gap-3">
+      <div className="flex flex-wrap items-center justify-center gap-3">
         <Button onClick={reset}>Tentar novamente</Button>
         <Link href="/" className={buttonVariants({ variant: "outline" })}>
-          Voltar ao início
+          Voltar pro início
         </Link>
       </div>
     </div>

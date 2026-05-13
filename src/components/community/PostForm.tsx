@@ -15,16 +15,30 @@ import {
 } from "@/components/ui/dialog"
 import { RichTextEditor } from "@/components/shared/RichTextEditor"
 import { createPost } from "@/actions/posts"
-import { Plus, Send } from "lucide-react"
+import { Plus, Loader2 } from "lucide-react"
 import type { Category } from "@/types/database.types"
 
 interface PostFormProps {
   orgId: string
   categories: Category[]
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+  hideTrigger?: boolean
 }
 
-export function PostForm({ orgId, categories }: PostFormProps) {
-  const [open, setOpen] = useState(false)
+export function PostForm({
+  orgId,
+  categories,
+  open: openProp,
+  onOpenChange,
+  hideTrigger = false,
+}: PostFormProps) {
+  const [openInternal, setOpenInternal] = useState(false)
+  const open = openProp ?? openInternal
+  const setOpen = (next: boolean) => {
+    if (onOpenChange) onOpenChange(next)
+    else setOpenInternal(next)
+  }
   const [title, setTitle] = useState("")
   const [body, setBody] = useState<unknown>(null)
   const [categoryId, setCategoryId] = useState("")
@@ -53,41 +67,53 @@ export function PostForm({ orgId, categories }: PostFormProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        render={
-          <Button>
-            <Plus className="size-4" />
-            Novo Post
-          </Button>
-        }
-      />
-      <DialogContent className="sm:max-w-lg">
-        <DialogHeader>
-          <DialogTitle>Criar Post</DialogTitle>
+      {!hideTrigger && (
+        <DialogTrigger
+          render={
+            <Button className="gap-1.5 bg-ink text-paper hover:bg-ink-soft">
+              <Plus className="h-4 w-4" />
+              <span className="font-medium">Novo post</span>
+            </Button>
+          }
+        />
+      )}
+      <DialogContent className="sm:max-w-2xl">
+        <DialogHeader className="space-y-1">
+          <span className="wf-mono">// novo post</span>
+          <DialogTitle className="wf-hand text-[26px]">
+            Compartilhe um case…
+          </DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
+
+        <div className="space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="post-title">Título</Label>
+            <Label htmlFor="post-title" className="wf-mono">
+              Titulo
+            </Label>
             <Input
               id="post-title"
-              placeholder="Título do post..."
+              placeholder="O que voce quer discutir?"
               value={title}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setTitle(e.target.value)
               }
               maxLength={200}
+              className="border-line bg-paper font-serif !text-[18px] placeholder:text-ink-low focus-visible:border-ink-low"
             />
           </div>
+
           {categories.length > 0 && (
             <div className="space-y-2">
-              <Label htmlFor="post-category">Categoria</Label>
+              <Label htmlFor="post-category" className="wf-mono">
+                Categoria
+              </Label>
               <select
                 id="post-category"
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
-                className="flex h-8 w-full rounded-lg border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="flex h-9 w-full rounded-md border border-line bg-paper px-3 text-[13.5px] text-foreground transition-colors focus:border-ink-low focus:outline-none focus:ring-2 focus:ring-gold/30"
               >
-                <option value="">Sem categoria</option>
+                <option value="">sem categoria</option>
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
                     {cat.name}
@@ -96,23 +122,40 @@ export function PostForm({ orgId, categories }: PostFormProps) {
               </select>
             </div>
           )}
+
           <div className="space-y-2">
-            <Label>Conteúdo</Label>
+            <Label className="wf-mono">Conteudo</Label>
             <RichTextEditor
               content={body}
               onChange={setBody}
-              placeholder="Escreva o conteúdo do seu post..."
+              placeholder="Conte a historia — contexto, decisao, resultado."
             />
           </div>
         </div>
-        <DialogFooter>
-          <Button
-            onClick={handleSubmit}
-            disabled={isPending || !title.trim() || !body}
-          >
-            <Send className="size-3.5" />
-            {isPending ? "Publicando..." : "Publicar"}
-          </Button>
+
+        <DialogFooter className="mt-2 flex items-center justify-between gap-3 sm:justify-between">
+          <span className="wf-mono text-ink-low">
+            posts uteis rendem ate +25 creditos
+          </span>
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setOpen(false)}
+              className="wf-mono"
+            >
+              cancelar
+            </Button>
+            <Button
+              type="button"
+              onClick={handleSubmit}
+              disabled={isPending || !title.trim() || !body}
+            >
+              {isPending && <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />}
+              {isPending ? "Publicando…" : "Postar"}
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

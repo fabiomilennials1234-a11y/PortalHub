@@ -14,6 +14,9 @@ interface EventFormProps {
   orgSlug: string
 }
 
+const labelClass =
+  "font-mono text-[11px] uppercase tracking-[0.08em] text-ink-mid"
+
 export function EventForm({ orgId, orgSlug }: EventFormProps) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
@@ -45,9 +48,11 @@ export function EventForm({ orgId, orgSlug }: EventFormProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <div className="space-y-2">
-        <Label htmlFor="event-title">Título</Label>
+        <Label htmlFor="event-title" className={labelClass}>
+          Título
+        </Label>
         <Input
           id="event-title"
           value={title}
@@ -58,7 +63,9 @@ export function EventForm({ orgId, orgSlug }: EventFormProps) {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="event-desc">Descrição</Label>
+        <Label htmlFor="event-desc" className={labelClass}>
+          Descrição
+        </Label>
         <Textarea
           id="event-desc"
           value={description}
@@ -70,7 +77,9 @@ export function EventForm({ orgId, orgSlug }: EventFormProps) {
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="event-start">Início</Label>
+          <Label htmlFor="event-start" className={labelClass}>
+            Início
+          </Label>
           <Input
             id="event-start"
             type="datetime-local"
@@ -81,7 +90,9 @@ export function EventForm({ orgId, orgSlug }: EventFormProps) {
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="event-end">Fim</Label>
+          <Label htmlFor="event-end" className={labelClass}>
+            Fim
+          </Label>
           <Input
             id="event-end"
             type="datetime-local"
@@ -93,7 +104,9 @@ export function EventForm({ orgId, orgSlug }: EventFormProps) {
         </div>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="event-location">Local (rótulo)</Label>
+        <Label htmlFor="event-location" className={labelClass}>
+          Local · rótulo
+        </Label>
         <Input
           id="event-location"
           value={locationLabel}
@@ -104,7 +117,9 @@ export function EventForm({ orgId, orgSlug }: EventFormProps) {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="event-url">URL do encontro</Label>
+        <Label htmlFor="event-url" className={labelClass}>
+          URL do encontro
+        </Label>
         <Input
           id="event-url"
           type="url"
@@ -116,7 +131,9 @@ export function EventForm({ orgId, orgSlug }: EventFormProps) {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="event-max">Limite de inscritos (opcional)</Label>
+        <Label htmlFor="event-max" className={labelClass}>
+          Limite de inscritos · opcional
+        </Label>
         <Input
           id="event-max"
           type="number"
@@ -129,9 +146,7 @@ export function EventForm({ orgId, orgSlug }: EventFormProps) {
       </div>
       <Button
         onClick={handleSubmit}
-        disabled={
-          isPending || !title.trim() || !startsAt || !endsAt
-        }
+        disabled={isPending || !title.trim() || !startsAt || !endsAt}
       >
         {isPending ? (
           <Loader2 className="size-4 animate-spin" />

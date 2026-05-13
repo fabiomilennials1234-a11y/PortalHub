@@ -22,7 +22,7 @@ export function useMembers(orgId: string) {
           points,
           level,
           joined_at,
-          profiles:user_id (
+          profile:profiles!memberships_user_id_fkey (
             full_name,
             avatar_url,
             bio

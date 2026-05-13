@@ -18,26 +18,26 @@ export function ProgressBar({
   const percent = max > 0 ? Math.min(Math.round((value / max) * 100), 100) : 0
 
   return (
-    <div className={cn("flex items-center gap-2", className)}>
+    <div className={cn("flex items-center gap-3", className)}>
       <div
         role="progressbar"
         aria-valuenow={percent}
         aria-valuemin={0}
         aria-valuemax={100}
         className={cn(
-          "w-full overflow-hidden rounded-full bg-muted",
+          "w-full overflow-hidden rounded-sm border border-line bg-paper-2",
           size === "sm" && "h-1.5",
           size === "md" && "h-2",
-          size === "lg" && "h-3",
+          size === "lg" && "h-2.5",
         )}
       >
         <div
-          className="h-full rounded-full bg-primary transition-all duration-500 ease-out"
+          className="h-full bg-gold transition-[width] duration-500 ease-out"
           style={{ width: `${percent}%` }}
         />
       </div>
       {showLabel && (
-        <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
+        <span className="wf-mono shrink-0 tabular-nums !text-ink-mid">
           {percent}%
         </span>
       )}

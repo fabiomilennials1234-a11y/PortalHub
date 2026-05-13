@@ -1,9 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { BookOpen, Clock } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
+import { BookOpen } from "lucide-react"
 import { formatDuration } from "@/lib/utils"
 import type { CourseWithAuthor } from "@/types/domain"
 
@@ -12,78 +9,58 @@ interface CourseCardProps {
   orgSlug: string
 }
 
-function getInitials(name: string | null): string {
-  if (!name) return "?"
-  return name
-    .split(" ")
-    .slice(0, 2)
-    .map((n: string) => n[0])
-    .join("")
-    .toUpperCase()
-}
-
 export function CourseCard({ course, orgSlug }: CourseCardProps) {
   return (
-    <Link href={`/${orgSlug}/courses/${course.slug}`}>
-      <Card className="group overflow-hidden transition-all hover:ring-2 hover:ring-primary/20">
-        <div className="relative aspect-video overflow-hidden bg-muted">
+    <Link
+      href={`/${orgSlug}/courses/${course.slug}`}
+      className="group block"
+    >
+      <article className="wf-box wf-box--hover overflow-hidden">
+        <div className="relative aspect-video overflow-hidden border-b border-line bg-paper-2">
           {course.thumbnail_url ? (
             <Image
               src={course.thumbnail_url}
               alt={course.title}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
             />
           ) : (
-            <div className="flex h-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
-              <BookOpen className="size-10 text-primary/40" />
+            <div className="flex h-full items-center justify-center bg-paper-2">
+              <BookOpen className="size-8 text-ink-low" strokeWidth={1.25} />
             </div>
           )}
           {course.status !== "published" && (
-            <Badge
-              variant="secondary"
-              className="absolute top-2 right-2 text-[10px]"
-            >
-              {course.status === "draft" ? "Rascunho" : "Arquivado"}
-            </Badge>
+            <span className="wf-pill absolute right-2 top-2 !bg-paper !text-ink-soft">
+              {course.status === "draft" ? "RASCUNHO" : "ARQUIVADO"}
+            </span>
           )}
         </div>
-        <CardContent className="space-y-2">
-          <h3 className="font-heading line-clamp-2 text-sm font-semibold leading-snug">
-            {course.title}
-          </h3>
+        <div className="space-y-2.5 p-4">
+          <div className="flex items-start gap-2">
+            <h3 className="font-serif text-[18px] font-medium leading-[1.2] tracking-[-0.015em] text-foreground line-clamp-2 flex-1">
+              {course.title}
+            </h3>
+          </div>
           {course.description && (
-            <p className="line-clamp-2 text-xs text-muted-foreground">
+            <p className="line-clamp-2 text-[13px] leading-[1.55] text-ink-mid">
               {course.description}
             </p>
           )}
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <div className="flex items-center gap-1.5">
-              <Avatar size="sm">
-                {course.profiles.avatar_url && (
-                  <AvatarImage src={course.profiles.avatar_url} />
-                )}
-                <AvatarFallback>
-                  {getInitials(course.profiles.full_name)}
-                </AvatarFallback>
-              </Avatar>
-              <span>{course.profiles.full_name ?? "Anônimo"}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1">
-                <BookOpen className="size-3" />
-                {course.total_lessons}
-              </span>
-              {course.total_duration_seconds > 0 && (
-                <span className="flex items-center gap-1">
-                  <Clock className="size-3" />
+          <div className="flex items-center gap-2 pt-1">
+            <span className="wf-mono">
+              {course.total_lessons} {course.total_lessons === 1 ? "AULA" : "AULAS"}
+            </span>
+            {course.total_duration_seconds > 0 && (
+              <>
+                <span aria-hidden className="text-ink-low">·</span>
+                <span className="wf-mono">
                   {formatDuration(course.total_duration_seconds)}
                 </span>
-              )}
-            </div>
+              </>
+            )}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </article>
     </Link>
   )
 }

@@ -5,7 +5,6 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
 import { login, signInWithOAuth, signInWithMagicLink } from "@/actions/auth"
 import { Loader2, Mail } from "lucide-react"
 
@@ -49,25 +48,27 @@ export function LoginForm() {
 
   if (magicLinkSent) {
     return (
-      <div className="rounded-lg border bg-card p-6 text-center">
-        <Mail className="mx-auto mb-3 h-10 w-10 text-muted-foreground" />
-        <h2 className="text-lg font-semibold">Verifique seu email</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Enviamos um link de acesso para seu email.
+      <div className="wf-box p-8 text-center">
+        <Mail className="mx-auto mb-4 h-10 w-10 text-gold-dk" />
+        <h2 className="wf-hand text-[22px]">Verifique seu email</h2>
+        <p className="mt-2 font-serif text-[14px] leading-relaxed text-ink-soft">
+          Enviamos um link de acesso. Clica nele pra entrar.
         </p>
+        <p className="wf-mono mt-4 text-ink-low">link valido por 1h</p>
       </div>
     )
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <Button
+        type="button"
         variant="outline"
-        className="w-full"
+        className="w-full border-line bg-paper hover:border-ink-low hover:bg-paper-2"
         onClick={handleGoogle}
         disabled={pending}
       >
-        <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+        <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24" aria-hidden>
           <path
             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
             fill="#4285F4"
@@ -85,32 +86,43 @@ export function LoginForm() {
             fill="#EA4335"
           />
         </svg>
-        Continuar com Google
+        <span className="font-medium">Continuar com Google</span>
       </Button>
 
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <Separator className="w-full" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">ou</span>
-        </div>
+      <div className="flex items-center gap-3">
+        <div className="h-px flex-1 bg-line-soft" />
+        <span className="wf-mono text-ink-low">ou</span>
+        <div className="h-px flex-1 bg-line-soft" />
       </div>
 
       {mode === "password" ? (
-        <form action={handlePasswordLogin} className="space-y-3">
+        <form action={handlePasswordLogin} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email" className="wf-mono">
+              Email
+            </Label>
             <Input
               id="email"
               name="email"
               type="email"
-              placeholder="voce@email.com"
+              placeholder="voce@trabalho.com"
               required
+              autoComplete="email"
             />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="password">Senha</Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password" className="wf-mono">
+                Senha
+              </Label>
+              <button
+                type="button"
+                onClick={() => setMode("magic-link")}
+                className="wf-mono text-gold-dk hover:underline"
+              >
+                Esqueci a senha
+              </button>
+            </div>
             <Input
               id="password"
               name="password"
@@ -118,10 +130,13 @@ export function LoginForm() {
               placeholder="••••••••"
               required
               minLength={6}
+              autoComplete="current-password"
             />
           </div>
           {error && (
-            <p className="text-sm text-destructive">{error}</p>
+            <p className="border-l-2 border-destructive pl-3 font-serif text-[13.5px] italic text-destructive">
+              {error}
+            </p>
           )}
           <Button type="submit" className="w-full" disabled={pending}>
             {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -130,46 +145,54 @@ export function LoginForm() {
           <button
             type="button"
             onClick={() => setMode("magic-link")}
-            className="w-full text-center text-sm text-muted-foreground hover:text-foreground"
+            className="wf-mono block w-full text-center text-ink-mid hover:text-gold-dk"
           >
-            Entrar com link mágico
+            ou entrar com link magico
           </button>
         </form>
       ) : (
-        <form action={handleMagicLink} className="space-y-3">
+        <form action={handleMagicLink} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email" className="wf-mono">
+              Email
+            </Label>
             <Input
               id="email"
               name="email"
               type="email"
-              placeholder="voce@email.com"
+              placeholder="voce@trabalho.com"
               required
+              autoComplete="email"
             />
           </div>
           {error && (
-            <p className="text-sm text-destructive">{error}</p>
+            <p className="border-l-2 border-destructive pl-3 font-serif text-[13.5px] italic text-destructive">
+              {error}
+            </p>
           )}
           <Button type="submit" className="w-full" disabled={pending}>
             {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Enviar link mágico
+            Enviar link magico
           </Button>
           <button
             type="button"
             onClick={() => setMode("password")}
-            className="w-full text-center text-sm text-muted-foreground hover:text-foreground"
+            className="wf-mono block w-full text-center text-ink-mid hover:text-gold-dk"
           >
-            Entrar com senha
+            voltar pra entrar com senha
           </button>
         </form>
       )}
 
-      <p className="text-center text-sm text-muted-foreground">
-        Não tem conta?{" "}
-        <Link href="/signup" className="font-medium text-foreground hover:underline">
-          Criar conta
+      <div className="border-t border-line-faint pt-5 text-center font-serif text-[14px] text-ink-soft">
+        Nao tem conta?{" "}
+        <Link
+          href="/signup"
+          className="font-medium text-foreground underline-offset-4 hover:text-gold-dk hover:underline"
+        >
+          Cria uma
         </Link>
-      </p>
+      </div>
     </div>
   )
 }

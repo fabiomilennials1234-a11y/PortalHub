@@ -1,53 +1,56 @@
 import { cn } from "@/lib/utils"
-import { Shield } from "lucide-react"
 
 interface LevelBadgeProps {
   level: number
   name?: string
+  /** Compatibility prop — preserved in signature, not rendered. */
   color?: string | null
   size?: "sm" | "md" | "lg"
   showName?: boolean
   className?: string
 }
 
+/**
+ * Editorial certification badge. Square gold-bordered tile carrying the tier
+ * number in serif, optionally followed by a "TIER N" caps-mono label.
+ */
 export function LevelBadge({
   level,
   name,
-  color,
   size = "md",
   showName = false,
   className,
 }: LevelBadgeProps) {
-  const finalColor = color ?? "#94a3b8"
+  const tile =
+    size === "sm" ? "size-[16px] text-[10.5px]" : size === "lg" ? "size-[22px] text-[14px]" : "size-[18px] text-[12px]"
+  const labelText = size === "sm" ? "text-[10px]" : size === "lg" ? "text-[11.5px]" : "text-[11px]"
+  const pad = size === "sm" ? "px-2 py-[2px] gap-1.5" : size === "lg" ? "px-2.5 py-1 gap-2" : "px-2 py-[3px] gap-2"
 
   return (
-    <div
+    <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 font-medium",
-        size === "sm" && "text-[10px]",
-        size === "md" && "text-xs",
-        size === "lg" && "text-sm",
+        "inline-flex items-center rounded-[3px] border border-line bg-paper",
+        pad,
         className,
       )}
-      style={{
-        backgroundColor: `color-mix(in oklch, ${finalColor} 18%, transparent)`,
-        color: finalColor,
-      }}
     >
-      <Shield
+      <span
         className={cn(
-          size === "sm" && "size-3",
-          size === "md" && "size-3.5",
-          size === "lg" && "size-4",
+          "inline-flex items-center justify-center rounded-[2px] border border-gold bg-gold-bg font-serif font-semibold text-gold-dk tabular-nums",
+          tile,
         )}
-      />
-      <span className="tabular-nums">Nv {level}</span>
-      {showName && name && (
-        <>
-          <span className="opacity-60">·</span>
-          <span>{name}</span>
-        </>
-      )}
-    </div>
+      >
+        {level}
+      </span>
+      <span
+        className={cn(
+          "font-mono uppercase tracking-[0.06em] text-ink-soft",
+          labelText,
+        )}
+      >
+        TIER {level}
+        {showName && name ? <span className="ml-1 text-ink-low">· {name}</span> : null}
+      </span>
+    </span>
   )
 }

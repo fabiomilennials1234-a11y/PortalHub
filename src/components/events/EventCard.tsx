@@ -1,8 +1,6 @@
 import Link from "next/link"
-import Image from "next/image"
-import { Calendar, Users, MapPin } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Users, MapPin } from "lucide-react"
+import { cn } from "@/lib/utils"
 import type { EventWithHost } from "@/types/domain"
 
 interface EventCardProps {
@@ -17,69 +15,110 @@ const STATUS_LABELS = {
   cancelled: "Cancelado",
 } as const
 
-const STATUS_VARIANTS = {
-  upcoming: "default",
-  live: "destructive",
-  ended: "secondary",
-  cancelled: "outline",
-} as const
+const MONTH_CAPS = [
+  "JAN",
+  "FEV",
+  "MAR",
+  "ABR",
+  "MAI",
+  "JUN",
+  "JUL",
+  "AGO",
+  "SET",
+  "OUT",
+  "NOV",
+  "DEZ",
+] as const
 
-function formatEventDate(date: string): string {
+function formatTime(date: string): string {
   return new Intl.DateTimeFormat("pt-BR", {
-    day: "numeric",
-    month: "short",
     hour: "2-digit",
     minute: "2-digit",
   }).format(new Date(date))
 }
 
+function formatWeekday(date: string): string {
+  return new Intl.DateTimeFormat("pt-BR", { weekday: "short" })
+    .format(new Date(date))
+    .replace(".", "")
+    .toUpperCase()
+}
+
 export function EventCard({ event, orgSlug }: EventCardProps) {
+  const start = new Date(event.starts_at)
+  const day = String(start.getDate()).padStart(2, "0")
+  const month = MONTH_CAPS[start.getMonth()]
+  const weekday = formatWeekday(event.starts_at)
+  const time = formatTime(event.starts_at)
+  const status = event.status
+
+  const statusPillClass =
+    status === "live"
+      ? "wf-pill wf-pill--gold"
+      : status === "ended"
+        ? "wf-pill opacity-60"
+        : status === "cancelled"
+          ? "wf-pill"
+          : "wf-pill"
+
   return (
-    <Link href={`/${orgSlug}/events/${event.id}`}>
-      <Card className="group overflow-hidden transition-all hover:ring-2 hover:ring-primary/20">
-        <div className="relative aspect-video overflow-hidden bg-muted">
-          {event.cover_url ? (
-            <Image
-              src={event.cover_url}
-              alt={event.title}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
-              <Calendar className="size-10 text-primary/40" />
+    <Link
+      href={`/${orgSlug}/events/${event.id}`}
+      className="block focus:outline-none"
+    >
+      <article
+        className={cn(
+          "wf-box wf-box--hover relative flex gap-4 p-4 transition-colors",
+          status === "ended" && "opacity-80",
+        )}
+      >
+        <div className="flex h-14 w-14 flex-none flex-col items-center justify-center gap-0 rounded-md border border-line bg-paper-2 leading-none">
+          <span className="font-mono text-[10px] font-medium tracking-[0.08em] text-gold-dk">
+            {month}
+          </span>
+          <span className="font-serif text-[22px] font-semibold leading-none text-foreground">
+            {day}
+          </span>
+        </div>
+
+        <div className="min-w-0 flex-1 space-y-1.5">
+          <div className="flex items-start justify-between gap-2">
+            <h3 className="line-clamp-2 font-serif text-[17px] font-semibold leading-tight text-foreground">
+              {event.title}
+            </h3>
+            <span
+              className={cn(
+                statusPillClass,
+                "flex-none whitespace-nowrap text-[10px] uppercase tracking-[0.08em]",
+              )}
+            >
+              {status === "live" && (
+                <span className="size-1.5 animate-pulse rounded-full bg-gold-dk" />
+              )}
+              {STATUS_LABELS[status]}
+            </span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span className="wf-mono">
+              {weekday} · {time}
+            </span>
+            <span className="wf-mono inline-flex items-center gap-1">
+              <Users className="size-3 text-ink-low" />
+              {event.attendees_count}
+              {event.max_attendees ? ` / ${event.max_attendees}` : ""}{" "}
+              confirmados
+            </span>
+          </div>
+
+          {event.location_label && (
+            <div className="flex items-center gap-1.5 text-[12.5px] text-ink-mid">
+              <MapPin className="size-3 shrink-0 text-ink-low" />
+              <span className="truncate">{event.location_label}</span>
             </div>
           )}
-          <Badge
-            variant={STATUS_VARIANTS[event.status]}
-            className="absolute top-2 right-2"
-          >
-            {STATUS_LABELS[event.status]}
-          </Badge>
         </div>
-        <CardContent className="space-y-2">
-          <h3 className="font-heading line-clamp-2 text-sm font-semibold leading-snug">
-            {event.title}
-          </h3>
-          <div className="space-y-1 text-xs text-muted-foreground">
-            <div className="flex items-center gap-1.5">
-              <Calendar className="size-3" />
-              {formatEventDate(event.starts_at)}
-            </div>
-            {event.location_label && (
-              <div className="flex items-center gap-1.5">
-                <MapPin className="size-3" />
-                <span className="truncate">{event.location_label}</span>
-              </div>
-            )}
-            <div className="flex items-center gap-1.5">
-              <Users className="size-3" />
-              {event.attendees_count}
-              {event.max_attendees ? ` / ${event.max_attendees}` : ""} inscritos
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      </article>
     </Link>
   )
 }

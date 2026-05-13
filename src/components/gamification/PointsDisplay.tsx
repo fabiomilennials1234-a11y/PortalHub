@@ -1,35 +1,51 @@
 import { cn } from "@/lib/utils"
-import { Sparkles } from "lucide-react"
 
 interface PointsDisplayProps {
   points: number
   size?: "sm" | "md" | "lg"
   className?: string
+  /**
+   * When `true` the "creditos" caps-mono suffix is hidden — useful for very
+   * dense table cells where the suffix becomes noise.
+   */
+  hideUnit?: boolean
 }
 
 export function PointsDisplay({
   points,
   size = "md",
   className,
+  hideUnit = false,
 }: PointsDisplayProps) {
+  const numberSize =
+    size === "sm" ? "text-[13px]" : size === "lg" ? "text-[22px]" : "text-[16px]"
+  const unitSize = size === "sm" ? "text-[9.5px]" : size === "lg" ? "text-[11px]" : "text-[10px]"
+
   return (
-    <div
+    <span
       className={cn(
-        "inline-flex items-center gap-1 font-medium tabular-nums text-amber-500",
-        size === "sm" && "text-xs",
-        size === "md" && "text-sm",
-        size === "lg" && "text-base",
+        "inline-flex items-baseline gap-1.5 text-foreground",
         className,
       )}
     >
-      <Sparkles
+      <span
         className={cn(
-          size === "sm" && "size-3",
-          size === "md" && "size-3.5",
-          size === "lg" && "size-4",
+          "font-serif font-semibold tabular-nums leading-none",
+          numberSize,
         )}
-      />
-      {points.toLocaleString("pt-BR")}
-    </div>
+      >
+        {points.toLocaleString("pt-BR")}
+      </span>
+      {!hideUnit && (
+        <span
+          className={cn(
+            "font-mono uppercase tracking-[0.08em] text-ink-mid leading-none",
+            unitSize,
+          )}
+        >
+          creditos
+        </span>
+      )}
+    </span>
   )
 }

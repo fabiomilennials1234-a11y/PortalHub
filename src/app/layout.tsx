@@ -1,5 +1,5 @@
-import type { Metadata } from "next"
-import { Inter, JetBrains_Mono } from "next/font/google"
+import type { Metadata, Viewport } from "next"
+import { Inter, JetBrains_Mono, Source_Serif_4 } from "next/font/google"
 import { Providers } from "@/components/shared/Providers"
 import "./globals.css"
 
@@ -12,6 +12,13 @@ const inter = Inter({
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
+})
+
+const sourceSerif = Source_Serif_4({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
   display: "swap",
 })
 
@@ -54,6 +61,16 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f3ecd9" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f172a" },
+  ],
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -62,10 +79,10 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${inter.variable} ${jetbrainsMono.variable} ${sourceSerif.variable}`}
       suppressHydrationWarning
     >
-      <body className="min-h-dvh bg-background font-sans antialiased">
+      <body className="min-h-dvh overflow-x-hidden bg-background font-sans text-foreground antialiased">
         <Providers>{children}</Providers>
       </body>
     </html>

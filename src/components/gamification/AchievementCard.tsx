@@ -18,22 +18,21 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
   return (
     <div
       className={cn(
-        "flex items-start gap-3 rounded-lg border border-border p-3 transition-colors",
-        achievement.earned ? "bg-card" : "bg-muted/20",
+        "wf-box wf-box--hover flex items-start gap-4 p-4",
+        !achievement.earned && "bg-paper-2",
       )}
     >
       <AchievementBadge
         type={achievement.type}
         earned={achievement.earned}
-        color={achievement.color}
         size="md"
       />
-      <div className="flex-1 space-y-1">
-        <div className="flex items-center justify-between gap-2">
+      <div className="flex-1 space-y-1.5">
+        <div className="flex items-start justify-between gap-3">
           <h4
             className={cn(
-              "font-heading text-sm font-medium",
-              !achievement.earned && "text-muted-foreground",
+              "font-serif text-[16px] font-semibold leading-tight tracking-[-0.005em]",
+              !achievement.earned && "text-ink-mid",
             )}
           >
             {achievement.name}
@@ -43,13 +42,18 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
           )}
         </div>
         {achievement.description && (
-          <p className="text-xs text-muted-foreground">
+          <p className="text-[13px] leading-snug text-ink-soft">
             {achievement.description}
           </p>
         )}
         {achievement.earned && achievement.earned_at && (
-          <p className="text-[10px] text-muted-foreground">
-            Conquistado em {formatDate(achievement.earned_at)}
+          <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-low">
+            conquistado em {formatDate(achievement.earned_at)}
+          </p>
+        )}
+        {!achievement.earned && (
+          <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-low">
+            bloqueado
           </p>
         )}
       </div>

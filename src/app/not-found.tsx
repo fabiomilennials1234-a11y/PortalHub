@@ -1,21 +1,23 @@
 import Link from "next/link"
-import { Compass } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center gap-6 px-4 text-center">
-      <Compass className="size-12 text-muted-foreground" />
-      <div className="space-y-2">
-        <h1 className="font-heading text-2xl font-bold">
-          Página não encontrada
+    <div className="flex min-h-dvh flex-col items-center justify-center gap-8 px-6 text-center">
+      <div className="space-y-4">
+        <h1 className="font-serif text-[88px] font-semibold leading-none tracking-tight text-gold-dk sm:text-[120px]">
+          404
         </h1>
-        <p className="max-w-md text-sm text-muted-foreground">
-          A página que você procura não existe ou foi movida.
+        <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-ink-mid">
+          Página não encontrada
+        </p>
+        <p className="mx-auto max-w-md font-serif text-[18px] leading-snug text-ink-soft">
+          A página que você procura não existe, foi movida, ou nunca foi
+          publicada.
         </p>
       </div>
       <Link href="/" className={buttonVariants()}>
-        Voltar ao início
+        Voltar pro início
       </Link>
     </div>
   )
