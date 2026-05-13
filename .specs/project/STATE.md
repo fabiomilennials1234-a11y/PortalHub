@@ -14,6 +14,7 @@
 | D008 | State management: TanStack Query v5 (server) + Zustand (client) | 2026-05-07 | Aceita |
 | D009 | Email: Resend + React Email templates | 2026-05-07 | Aceita |
 | D010 | Redesign visual editorial premium (cream paper + navy ink + gold accent + Source Serif 4). Wireframes importados em PortalHub-dir/04 - Design/wireframes/imported-2026-05-13/. Sem mudanca de schema/RLS — rename UI: pontos→creditos, levels→TIERs. | 2026-05-13 | Aceita |
+| D011 | Fase 3 backend: streak diario (calculate_user_streak SECURITY DEFINER), weekly_delta + weekly_ranking views (security_invoker), lesson_notes table (RLS hard own-only). Reviewer auditou 5 issues, todas fixadas (search_path, idempotencia policies, perf single-pass CTE streak, timezone parametrizada, tiebreaker rank). | 2026-05-13 | Aceita |
 
 ## ADRs
 

@@ -4,11 +4,13 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { LessonContent } from "@/components/courses/LessonContent"
+import { LessonNotes } from "@/components/courses/LessonNotes"
 import { VideoEmbed } from "@/components/courses/VideoEmbed"
 import { RichTextRenderer } from "@/components/shared/RichTextRenderer"
 import { CourseSidebar } from "@/components/courses/CourseSidebar"
 import { useLessonProgress } from "@/hooks/useLessonProgress"
 import { useEnrollment } from "@/hooks/useEnrollment"
+import { useAuth } from "@/hooks/useAuth"
 import {
   ChevronLeft,
   ChevronRight,
@@ -56,6 +58,8 @@ export function LessonPlayerClient({
     isMarking,
   } = useLessonProgress(course.id)
   const { isEnrolled } = useEnrollment(course.id)
+  const { data: auth } = useAuth()
+  const userId = auth?.user?.id ?? null
 
   const isCompleted = completedIds.has(lessonId)
   const basePath = `/${orgSlug}/courses/${course.slug}`
@@ -233,14 +237,15 @@ export function LessonPlayerClient({
             </TabsContent>
 
             <TabsContent value="notas" className="pt-5">
-              <div className="wf-box flex flex-col items-start gap-3 bg-paper p-6">
-                <p className="font-serif text-[14.5px] italic leading-[1.65] text-ink-low">
-                  Suas anotações aparecem aqui.
-                </p>
-                <Button variant="outline" size="sm" disabled>
-                  Adicionar nota
-                </Button>
-              </div>
+              {userId ? (
+                <LessonNotes lessonId={lesson.id} userId={userId} />
+              ) : (
+                <div className="wf-box flex flex-col items-start gap-3 bg-paper p-6">
+                  <p className="font-serif text-[14.5px] italic leading-[1.65] text-ink-low">
+                    Faça login para criar anotações nesta lição.
+                  </p>
+                </div>
+              )}
             </TabsContent>
 
             <TabsContent value="recursos" className="pt-5">

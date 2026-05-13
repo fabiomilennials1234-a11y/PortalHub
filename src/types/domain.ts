@@ -221,6 +221,27 @@ export interface UserStats {
   achievements_count: number
 }
 
+export interface UserWeeklyDelta {
+  user_id: string
+  org_id: string
+  weekly_points: number
+  weekly_events: number
+  last_event_at: string
+}
+
+export interface UserWeeklyRanking extends UserWeeklyDelta {
+  rank: number
+}
+
+export interface LessonNote {
+  id: string
+  user_id: string
+  lesson_id: string
+  body: string
+  created_at: string
+  updated_at: string
+}
+
 // ── Payments ──
 
 export type PlanInterval = "month" | "year"

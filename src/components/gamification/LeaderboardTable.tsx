@@ -2,10 +2,12 @@
 
 import Link from "next/link"
 import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 import { cn } from "@/lib/utils"
 import { GradientAvatar } from "@/components/shared/GradientAvatar"
 import { useLeaderboard } from "@/hooks/useLeaderboard"
 import { useAuth } from "@/hooks/useAuth"
+import { createClient } from "@/lib/supabase/client"
 import { Loader2 } from "lucide-react"
 
 interface LeaderboardTableProps {
@@ -22,20 +24,6 @@ const FILTERS: ReadonlyArray<{ id: RangeFilter; label: string }> = [
   { id: "all", label: "Todo" },
 ]
 
-/**
- * Visual-only delta inferred from a stable hash of the user id. Keeps the
- * leaderboard rows feeling alive while the real "points earned this week"
- * pipeline is not yet wired.
- */
-function mockDelta(userId: string): number {
-  let hash = 0
-  for (let i = 0; i < userId.length; i++) {
-    hash = (hash * 31 + userId.charCodeAt(i)) | 0
-  }
-  const span = 380 // 400 - 20
-  return 20 + (Math.abs(hash) % (span + 1))
-}
-
 export function LeaderboardTable({
   orgId,
   orgSlug,
@@ -44,6 +32,24 @@ export function LeaderboardTable({
   const [range, setRange] = useState<RangeFilter>("week")
   const { data, isLoading } = useLeaderboard(orgId, limit)
   const { data: auth } = useAuth()
+
+  const { data: deltas } = useQuery<Record<string, number>>({
+    queryKey: ["weekly-delta", orgId],
+    queryFn: async () => {
+      const supabase = createClient()
+      const { data: rows } = await supabase
+        .from("user_weekly_delta")
+        .select("user_id, weekly_points")
+        .eq("org_id", orgId)
+      const map: Record<string, number> = {}
+      for (const row of (rows ?? []) as { user_id: string; weekly_points: number }[]) {
+        map[row.user_id] = row.weekly_points
+      }
+      return map
+    },
+    enabled: !!orgId,
+    staleTime: 60 * 1000,
+  })
 
   return (
     <div className="space-y-3">
@@ -91,7 +97,7 @@ export function LeaderboardTable({
             {data.map((entry, idx) => {
               const isCurrent = auth?.user?.id === entry.user_id
               const isLast = idx === data.length - 1
-              const delta = mockDelta(entry.user_id)
+              const delta = deltas?.[entry.user_id] ?? 0
 
               return (
                 <li
@@ -141,8 +147,19 @@ export function LeaderboardTable({
                       tier {entry.level}
                     </span>
 
-                    <span className="text-right font-mono text-[11px] uppercase tracking-[0.06em] tabular-nums text-success">
-                      +{delta}
+                    <span
+                      className={cn(
+                        "text-right font-mono text-[11px] uppercase tracking-[0.06em] tabular-nums",
+                        delta > 0 && "text-success",
+                        delta < 0 && "text-destructive",
+                        delta === 0 && "text-ink-low",
+                      )}
+                    >
+                      {delta === 0
+                        ? "—"
+                        : delta > 0
+                          ? `+${delta}`
+                          : `${delta}`}
                     </span>
 
                     <span className="flex items-baseline justify-end gap-1.5">

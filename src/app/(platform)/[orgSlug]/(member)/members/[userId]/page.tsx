@@ -61,8 +61,8 @@ export default async function ProfilePage({ params }: Props) {
         .single()
     : { data: null }
 
-  // Counts for the stat grid. Each runs in parallel; failures fall back to 0.
-  const [postsRes, commentsRes, coursesRes] = org
+  // Counts + gamification signals run in parallel. Failures fall back gracefully.
+  const [postsRes, commentsRes, coursesRes, streakRes, rankRes] = org
     ? await Promise.all([
         supabase
           .from("posts")
@@ -79,12 +79,36 @@ export default async function ProfilePage({ params }: Props) {
           .select("id", { count: "exact", head: true })
           .eq("user_id", userId)
           .not("completed_at", "is", null),
+        supabase.rpc("calculate_user_streak", {
+          target_user_id: userId,
+          target_org_id: org.id,
+          target_timezone: "America/Sao_Paulo",
+        }),
+        supabase
+          .from("user_weekly_ranking")
+          .select("rank")
+          .eq("org_id", org.id)
+          .eq("user_id", userId)
+          .maybeSingle(),
       ])
-    : [{ count: 0 }, { count: 0 }, { count: 0 }]
+    : [
+        { count: 0 },
+        { count: 0 },
+        { count: 0 },
+        { data: null as number | null },
+        { data: null as { rank: number } | null },
+      ]
 
   const postsCount = postsRes.count ?? 0
   const commentsCount = commentsRes.count ?? 0
   const coursesCount = coursesRes.count ?? 0
+
+  const streak: number =
+    typeof (streakRes as { data?: unknown }).data === "number"
+      ? ((streakRes as { data: number }).data ?? 0)
+      : 0
+  const weeklyRank: number | null =
+    (rankRes as { data?: { rank?: number } | null }).data?.rank ?? null
 
   const roleLabel = membership ? ROLE_LABEL[membership.role] ?? membership.role : null
 
@@ -124,12 +148,16 @@ export default async function ProfilePage({ params }: Props) {
                 </p>
                 <div className="flex flex-wrap items-center gap-1.5 pt-1">
                   <LevelBadge level={membership.level} />
-                  <span className="wf-pill wf-pill--gold !text-[11px]">
-                    Top 5 da semana
-                  </span>
-                  <span className="wf-pill wf-pill--gold !text-[11px]">
-                    47 dias de sequencia
-                  </span>
+                  {weeklyRank !== null && weeklyRank <= 5 && (
+                    <span className="wf-pill wf-pill--gold !text-[11px]">
+                      Top {weeklyRank} da semana
+                    </span>
+                  )}
+                  {streak >= 2 && (
+                    <span className="wf-pill wf-pill--gold !text-[11px]">
+                      {streak} dias de sequência
+                    </span>
+                  )}
                 </div>
               </>
             )}
