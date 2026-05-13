@@ -64,7 +64,7 @@ export default async function PostDetailPage({ params }: Props) {
   )
 
   return (
-    <div className="mx-auto w-full max-w-3xl">
+    <div className="mx-auto w-full max-w-7xl">
       {/* Breadcrumb */}
       <Link
         href={`/${orgSlug}/community`}

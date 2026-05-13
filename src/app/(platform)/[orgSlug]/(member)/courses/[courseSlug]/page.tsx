@@ -86,7 +86,7 @@ export default async function CourseDetailPage({ params }: Props) {
   }))
 
   return (
-    <div className="mx-auto w-full max-w-5xl space-y-10">
+    <div className="mx-auto w-full max-w-7xl space-y-10">
       {/* Hero — editorial */}
       <header className="space-y-6">
         <div className="wf-box overflow-hidden">

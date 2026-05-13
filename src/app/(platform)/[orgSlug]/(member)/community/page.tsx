@@ -77,7 +77,7 @@ export default async function CommunityPage({ params }: Props) {
   const onlineCount = 0
 
   return (
-    <div className="mx-auto w-full max-w-6xl">
+    <div className="mx-auto w-full max-w-7xl">
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-8">
         <main className="min-w-0 space-y-6">
           <CommunityHero

@@ -11,7 +11,7 @@ export default async function GuidelinesPage({ params }: Props) {
   const { orgSlug } = await params
 
   return (
-    <div className="mx-auto w-full max-w-3xl space-y-8">
+    <div className="mx-auto w-full max-w-7xl space-y-8">
       <div>
         <Link
           href={`/${orgSlug}/community`}

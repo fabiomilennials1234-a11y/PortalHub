@@ -121,7 +121,7 @@ export default async function ProfilePage({ params }: Props) {
     : null
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-8 py-2">
+    <div className="mx-auto w-full max-w-7xl space-y-8 py-2">
       {/* Header */}
       <header className="space-y-5">
         <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-6">

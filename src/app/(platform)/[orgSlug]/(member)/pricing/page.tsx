@@ -21,7 +21,7 @@ export default async function PricingPage({ params }: Props) {
   if (!org) notFound()
 
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-12 py-4">
+    <div className="mx-auto w-full max-w-7xl space-y-12 py-4">
       <header className="space-y-5 text-center">
         <span className="wf-pill wf-pill--gold inline-flex text-[10px] uppercase tracking-[0.08em]">
           Preços honestos · sem trial enganador
