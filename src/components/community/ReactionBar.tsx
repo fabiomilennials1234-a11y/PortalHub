@@ -1,16 +1,16 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import { useReactions } from "@/hooks/useReactions"
 import { useAuth } from "@/hooks/useAuth"
 import type { ReactionType } from "@/types/domain"
+import { ThumbsUp, Heart, Lightbulb, Flame, type LucideIcon } from "lucide-react"
 
-const REACTIONS: { type: ReactionType; emoji: string }[] = [
-  { type: "like", emoji: "👍" },
-  { type: "love", emoji: "❤️" },
-  { type: "insightful", emoji: "💡" },
-  { type: "fire", emoji: "🔥" },
+const REACTIONS: { type: ReactionType; icon: LucideIcon; label: string }[] = [
+  { type: "like", icon: ThumbsUp, label: "util" },
+  { type: "love", icon: Heart, label: "amei" },
+  { type: "insightful", icon: Lightbulb, label: "insight" },
+  { type: "fire", icon: Flame, label: "fogo" },
 ]
 
 interface ReactionBarProps {
@@ -34,29 +34,39 @@ export function ReactionBar({
     (r) => r.user_id === auth?.user?.id,
   )?.reaction_type as ReactionType | undefined
 
+  const disabled = isToggling || !auth?.user
+
   return (
-    <div className={cn("flex items-center gap-1", className)}>
-      {REACTIONS.map(({ type, emoji }) => {
+    <div className={cn("flex flex-wrap items-center gap-1.5", className)}>
+      {REACTIONS.map(({ type, icon: Icon, label }) => {
         const count = counts[type]
         const isActive = userReaction === type
 
         return (
-          <Button
+          <button
             key={type}
-            variant={isActive ? "secondary" : "ghost"}
-            size="xs"
-            disabled={isToggling || !auth?.user}
+            type="button"
+            disabled={disabled}
             onClick={() => toggle(type)}
+            aria-pressed={isActive}
+            aria-label={label}
             className={cn(
-              "gap-1 text-xs",
-              isActive && "ring-1 ring-primary/30",
+              "wf-pill transition-colors",
+              "hover:border-ink-low",
+              isActive && "wf-pill--accent",
+              disabled && "cursor-not-allowed opacity-60",
             )}
           >
-            <span>{emoji}</span>
+            <Icon
+              className={cn(
+                "h-3 w-3",
+                isActive ? "text-paper" : "text-ink-mid",
+              )}
+            />
             {count > 0 && (
               <span className="tabular-nums">{count}</span>
             )}
-          </Button>
+          </button>
         )
       })}
     </div>

@@ -31,34 +31,51 @@ export function ModuleAccordion({
     (l) => l.id === currentLessonId,
   )
   const [open, setOpen] = useState(defaultOpen || hasActiveLessonInside)
+  const withProgress = isWithProgress(module)
+  const isComplete =
+    withProgress && module.total_count > 0 && module.completed_count === module.total_count
 
   return (
-    <div className="rounded-lg border border-border">
+    <div className="wf-box overflow-hidden">
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-medium transition-colors hover:bg-muted/30"
+        className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-paper-2"
       >
+        <span
+          className={cn(
+            "flex size-4 shrink-0 items-center justify-center rounded-sm border",
+            isComplete
+              ? "border-gold bg-gold-bg"
+              : "border-line bg-paper",
+          )}
+          aria-hidden
+        >
+          {isComplete && (
+            <span className="wf-mono !text-[9px] !text-gold-dk">✓</span>
+          )}
+        </span>
+        <span className="font-serif text-[15px] font-medium tracking-[-0.01em] text-foreground flex-1">
+          {module.title}
+        </span>
+        {withProgress ? (
+          <span className="wf-mono tabular-nums !text-ink-mid">
+            {module.completed_count}/{module.total_count}
+          </span>
+        ) : (
+          <span className="wf-mono tabular-nums !text-ink-mid">
+            {module.lessons.length} {module.lessons.length === 1 ? "AULA" : "AULAS"}
+          </span>
+        )}
         <ChevronDown
           className={cn(
-            "size-4 shrink-0 text-muted-foreground transition-transform duration-200",
+            "size-4 shrink-0 text-ink-low transition-transform duration-200",
             open && "rotate-180",
           )}
         />
-        <span className="flex-1">{module.title}</span>
-        {isWithProgress(module) && (
-          <span className="text-xs tabular-nums text-muted-foreground">
-            {module.completed_count}/{module.total_count}
-          </span>
-        )}
-        {!isWithProgress(module) && (
-          <span className="text-xs tabular-nums text-muted-foreground">
-            {module.lessons.length} aula{module.lessons.length !== 1 ? "s" : ""}
-          </span>
-        )}
       </button>
       {open && (
-        <div className="border-t border-border px-1 py-1">
+        <div className="border-t border-line-soft bg-paper px-1.5 py-1.5">
           {module.lessons.map((lesson) => (
             <LessonItem
               key={lesson.id}

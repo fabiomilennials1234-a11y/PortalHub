@@ -2,14 +2,14 @@ project_id = "portalhub-local"
 
 [api]
 enabled = true
-port = 54321
+port = 54621
 schemas = ["public", "storage", "graphql_public"]
 extra_search_path = ["public", "extensions"]
 max_rows = 1000
 
 [db]
-port = 54322
-shadow_port = 54320
+port = 54622
+shadow_port = 54620
 major_version = 15
 
 [db.pooler]
@@ -20,12 +20,12 @@ enabled = true
 
 [studio]
 enabled = true
-port = 54323
+port = 54623
 api_url = "http://127.0.0.1"
 
 [inbucket]
 enabled = true
-port = 54324
+port = 54624
 
 [storage]
 enabled = true

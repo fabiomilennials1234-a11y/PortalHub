@@ -5,6 +5,7 @@ import type { AchievementType } from "@/types/domain"
 interface AchievementBadgeProps {
   type: AchievementType
   earned?: boolean
+  /** Compatibility prop — preserved in signature, not rendered. */
   color?: string | null
   size?: "sm" | "md" | "lg"
   className?: string
@@ -19,37 +20,28 @@ const ICONS = {
 export function AchievementBadge({
   type,
   earned = false,
-  color,
   size = "md",
   className,
 }: AchievementBadgeProps) {
   const Icon = ICONS[type] ?? Award
-  const finalColor = color ?? "#fbbf24"
+
+  const ring =
+    size === "sm" ? "size-10" : size === "lg" ? "size-16" : "size-14"
+  const iconCls =
+    size === "sm" ? "size-4" : size === "lg" ? "size-7" : "size-[22px]"
 
   return (
-    <div
+    <span
       className={cn(
-        "inline-flex items-center justify-center rounded-full transition-all",
-        size === "sm" && "size-7",
-        size === "md" && "size-10",
-        size === "lg" && "size-14",
-        earned ? "shadow-md" : "opacity-30 grayscale",
+        "inline-flex items-center justify-center rounded-full border-[1.5px] bg-paper transition-colors",
+        earned
+          ? "border-gold text-foreground"
+          : "border-line-soft text-ink-low opacity-50",
+        ring,
         className,
       )}
-      style={{
-        backgroundColor: earned
-          ? `color-mix(in oklch, ${finalColor} 20%, transparent)`
-          : "var(--muted)",
-        color: earned ? finalColor : "var(--muted-foreground)",
-      }}
     >
-      <Icon
-        className={cn(
-          size === "sm" && "size-3.5",
-          size === "md" && "size-5",
-          size === "lg" && "size-7",
-        )}
-      />
-    </div>
+      <Icon className={iconCls} strokeWidth={1.5} />
+    </span>
   )
 }

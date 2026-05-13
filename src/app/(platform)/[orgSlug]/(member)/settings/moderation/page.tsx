@@ -40,13 +40,16 @@ export default async function ModerationPage({ params }: Props) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl space-y-6">
-      <div className="space-y-1">
-        <h1 className="font-heading text-lg font-semibold">Moderação</h1>
-        <p className="text-xs text-muted-foreground">
-          Denúncias enviadas pelos membros desta organização.
+    <div className="mx-auto w-full max-w-3xl space-y-8">
+      <header className="space-y-2 border-b border-line pb-6">
+        <p className="wf-mono">Moderação · denúncias</p>
+        <h1 className="font-serif text-[32px] font-semibold leading-none tracking-tight text-foreground">
+          Moderação
+        </h1>
+        <p className="wf-mono">
+          o que sua comunidade reportou — revise e decida
         </p>
-      </div>
+      </header>
       <ReportsList orgId={org.id} />
     </div>
   )

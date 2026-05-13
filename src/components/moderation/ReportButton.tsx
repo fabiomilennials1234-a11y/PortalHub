@@ -84,7 +84,7 @@ export function ReportButton({
           <DialogTitle>Reportar conteúdo</DialogTitle>
         </DialogHeader>
         {submitted ? (
-          <p className="py-4 text-center text-sm text-emerald-500">
+          <p className="py-4 text-center font-serif text-[15px] italic text-success">
             Denúncia enviada. Os moderadores foram notificados.
           </p>
         ) : (
@@ -95,7 +95,7 @@ export function ReportButton({
                 id="report-reason"
                 value={reason}
                 onChange={(e) => setReason(e.target.value as ReportReason)}
-                className="flex h-8 w-full rounded-lg border border-input bg-background px-3 text-sm"
+                className="flex h-9 w-full rounded-sm border border-border bg-paper px-3 text-sm"
               >
                 {REASONS.map((r) => (
                   <option key={r.value} value={r.value}>

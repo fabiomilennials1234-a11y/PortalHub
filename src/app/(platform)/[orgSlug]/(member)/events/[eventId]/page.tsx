@@ -3,9 +3,8 @@ import { notFound } from "next/navigation"
 import Image from "next/image"
 import { Calendar, Users, MapPin, ExternalLink } from "lucide-react"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
 import { EventRSVPButton } from "@/components/events/EventRSVPButton"
+import { cn } from "@/lib/utils"
 
 interface Props {
   params: Promise<{ orgSlug: string; eventId: string }>
@@ -18,16 +17,6 @@ const STATUS_LABELS: Record<EventStatus, string> = {
   live: "Ao vivo",
   ended: "Finalizado",
   cancelled: "Cancelado",
-}
-
-const STATUS_VARIANTS: Record<
-  EventStatus,
-  "default" | "destructive" | "secondary" | "outline"
-> = {
-  upcoming: "default",
-  live: "destructive",
-  ended: "secondary",
-  cancelled: "outline",
 }
 
 function getInitials(name: string | null): string {
@@ -79,9 +68,17 @@ export default async function EventDetailPage({ params }: Props) {
     avatar_url: string | null
   }
 
+  const status = event.status as EventStatus
+  const statusPillClass =
+    status === "live"
+      ? "wf-pill wf-pill--gold"
+      : status === "ended"
+        ? "wf-pill opacity-60"
+        : "wf-pill"
+
   return (
-    <div className="mx-auto w-full max-w-3xl space-y-6">
-      <div className="relative overflow-hidden rounded-xl">
+    <article className="mx-auto w-full max-w-3xl space-y-8">
+      <div className="relative overflow-hidden rounded-md border border-line">
         {event.cover_url ? (
           <div className="relative aspect-[21/9]">
             <Image
@@ -92,65 +89,76 @@ export default async function EventDetailPage({ params }: Props) {
             />
           </div>
         ) : (
-          <div className="flex aspect-[21/9] items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
-            <Calendar className="size-16 text-primary/30" />
+          <div className="flex aspect-[21/9] items-center justify-center bg-paper-2">
+            <Calendar className="size-16 text-ink-low" />
           </div>
         )}
       </div>
 
-      <div className="space-y-3">
-        <div className="flex items-start justify-between gap-3">
-          <h1 className="font-heading text-2xl font-bold">{event.title}</h1>
-          <Badge variant={STATUS_VARIANTS[event.status as EventStatus]}>
-            {STATUS_LABELS[event.status as EventStatus]}
-          </Badge>
+      <header className="space-y-4">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <h1 className="font-serif text-[32px] font-semibold leading-tight tracking-tight text-foreground">
+            {event.title}
+          </h1>
+          <span
+            className={cn(
+              statusPillClass,
+              "flex-none text-[10px] uppercase tracking-[0.08em]",
+            )}
+          >
+            {status === "live" && (
+              <span className="size-1.5 animate-pulse rounded-full bg-gold-dk" />
+            )}
+            {STATUS_LABELS[status]}
+          </span>
         </div>
 
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <div className="flex items-center gap-2 text-[13px] text-ink-mid">
           <Avatar size="sm">
             {host.avatar_url && <AvatarImage src={host.avatar_url} />}
             <AvatarFallback>{getInitials(host.full_name)}</AvatarFallback>
           </Avatar>
-          <span>Apresentado por {host.full_name ?? "Anônimo"}</span>
+          <span>
+            Apresentado por{" "}
+            <span className="text-foreground">{host.full_name ?? "Anônimo"}</span>
+          </span>
         </div>
-      </div>
+      </header>
 
-      <Separator />
-
-      <div className="space-y-3 text-sm">
+      <div className="wf-box space-y-4 p-5">
         <div className="flex items-start gap-3">
-          <Calendar className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
-          <div>
-            <p className="font-medium">{formatDateTime(event.starts_at)}</p>
-            <p className="text-xs text-muted-foreground">
-              até {formatDateTime(event.ends_at)}
+          <Calendar className="mt-0.5 size-4 shrink-0 text-ink-low" />
+          <div className="space-y-0.5">
+            <p className="text-[14px] font-medium text-foreground">
+              {formatDateTime(event.starts_at)}
             </p>
+            <p className="wf-mono">até {formatDateTime(event.ends_at)}</p>
           </div>
         </div>
 
         {event.location_label && (
-          <div className="flex items-center gap-3">
-            <MapPin className="size-4 shrink-0 text-muted-foreground" />
+          <div className="flex items-center gap-3 text-[14px] text-foreground">
+            <MapPin className="size-4 shrink-0 text-ink-low" />
             <span>{event.location_label}</span>
           </div>
         )}
 
         {event.location_url && (
-          <div className="flex items-center gap-3">
-            <ExternalLink className="size-4 shrink-0 text-muted-foreground" />
+          <div className="flex items-center gap-3 text-[14px]">
+            <ExternalLink className="size-4 shrink-0 text-ink-low" />
             <a
               href={event.location_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary hover:underline"
+              className="font-mono text-[11px] uppercase tracking-[0.06em] text-gold-dk hover:underline"
             >
-              Acessar evento
+              Acessar evento →
             </a>
           </div>
         )}
 
-        <div className="flex items-center gap-3">
-          <Users className="size-4 shrink-0 text-muted-foreground" />
+        <div className="flex items-center gap-3 text-[14px] text-foreground">
+          <Users className="size-4 shrink-0 text-ink-low" />
           <span>
             {event.attendees_count}
             {event.max_attendees ? ` / ${event.max_attendees}` : ""} inscritos
@@ -158,21 +166,16 @@ export default async function EventDetailPage({ params }: Props) {
         </div>
       </div>
 
-      <Separator />
-
       <EventRSVPButton eventId={eventId} />
 
       {event.description && (
-        <>
-          <Separator />
-          <div className="space-y-2">
-            <h2 className="font-heading text-sm font-semibold">Sobre</h2>
-            <p className="whitespace-pre-wrap text-sm text-muted-foreground">
-              {event.description}
-            </p>
-          </div>
-        </>
+        <section className="space-y-3 border-t border-line pt-6">
+          <p className="wf-mono">Sobre o evento</p>
+          <p className="whitespace-pre-wrap font-serif text-[16px] leading-relaxed text-ink-soft">
+            {event.description}
+          </p>
+        </section>
       )}
-    </div>
+    </article>
   )
 }

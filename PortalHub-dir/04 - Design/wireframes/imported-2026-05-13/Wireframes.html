@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1400" />
+<title>PortalHub — Redesign Wireframes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Patrick+Hand&display=swap" rel="stylesheet" />
+<style>
+  html,body{margin:0;padding:0;background:#efece4;font-family:'Geist',-apple-system,BlinkMacSystemFont,sans-serif;color:#1a1816;-webkit-font-smoothing:antialiased}
+  #root{min-height:100vh}
+  /* Wireframe shared tokens ---------------------------------------------- */
+  .wf{
+    --ink:#1a1816;
+    --ink-soft:#3f3a34;
+    --ink-mid:#6b645c;
+    --ink-low:#a39c91;
+    --paper:#faf6ec;
+    --paper-2:#f3eedf;
+    --line:#2a2622;
+    --line-soft:#1a181633;
+    --line-faint:#1a181620;
+    --accent:#ff5a1f;
+    --accent-2:#ffd23a;
+    --accent-3:#2c63ff;
+    --good:#3d8b3d;
+    font-family:'Geist','Inter',sans-serif;
+    color:var(--ink);
+    background:var(--paper);
+    position:relative;
+    overflow:hidden;
+  }
+  .wf, .wf *{box-sizing:border-box}
+  .wf-hand{font-family:'Caveat','Patrick Hand',cursive;font-weight:500;letter-spacing:.01em}
+  .wf-mono{font-family:'Geist Mono','JetBrains Mono',monospace}
+  .wf-label{font-family:'Patrick Hand',cursive;color:var(--ink-soft);font-size:13px;letter-spacing:.02em}
+
+  /* Placeholder box: striped diagonal fill + monospaced caption */
+  .wf-ph{
+    position:relative;
+    background:
+      repeating-linear-gradient(45deg, transparent 0 8px, #1a18160c 8px 9px);
+    border:1.5px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--ink-mid);
+    font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.02em;
+    text-align:center;padding:8px;
+  }
+  .wf-ph.wf-dashed{border-style:dashed}
+  .wf-ph.wf-soft{border-color:var(--line-soft);color:var(--ink-mid)}
+  .wf-ph.wf-img{background:
+      repeating-linear-gradient(135deg, #1a181610 0 10px, transparent 10px 22px),
+      linear-gradient(180deg,#f3eedf,#e8e0cc)}
+
+  /* Sketchy box outline using crisp 1.5px black */
+  .wf-box{border:1.5px solid var(--line);background:var(--paper);border-radius:4px}
+  .wf-box.wf-soft{border-color:var(--line-soft)}
+  .wf-box.wf-rough{border-radius:6px 4px 7px 5px}
+  .wf-card{background:var(--paper);border:1.5px solid var(--line);border-radius:6px 5px 7px 5px;padding:14px}
+
+  /* Pills, chips, buttons (sketchy) */
+  .wf-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1.5px solid var(--line);border-radius:999px;background:var(--paper);font-size:12px;font-weight:500}
+  .wf-pill.wf-accent{background:var(--accent);color:#fff;border-color:var(--ink)}
+  .wf-pill.wf-yellow{background:var(--accent-2);border-color:var(--ink)}
+  .wf-pill.wf-ghost{background:transparent}
+  .wf-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 14px;border:1.5px solid var(--ink);border-radius:6px;font-weight:600;font-size:13px;background:var(--paper);cursor:pointer;box-shadow:2px 2px 0 var(--ink)}
+  .wf-btn.wf-primary{background:var(--accent);color:#fff}
+  .wf-btn.wf-yellow{background:var(--accent-2)}
+  .wf-btn.wf-ghost{box-shadow:none;background:transparent}
+  .wf-btn.wf-sm{padding:5px 10px;font-size:12px}
+
+  /* "Sketched" curly underline using SVG */
+  .wf-underline{position:relative;display:inline-block}
+  .wf-underline::after{content:"";position:absolute;left:-4px;right:-4px;bottom:-6px;height:8px;background:no-repeat center/100% 100% url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8' preserveAspectRatio='none'><path d='M0 5 Q 12 0 25 4 T 50 4 T 75 4 T 100 4' stroke='%23ff5a1f' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>")}
+
+  /* Avatar circle (with initials) */
+  .wf-av{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--line);background:var(--paper-2);display:inline-flex;align-items:center;justify-content:center;font-family:'Patrick Hand',cursive;font-size:14px;color:var(--ink)}
+  .wf-av.wf-sm{width:24px;height:24px;font-size:11px}
+  .wf-av.wf-lg{width:54px;height:54px;font-size:18px}
+  .wf-av.wf-xl{width:84px;height:84px;font-size:26px}
+
+  /* Vertical rule / hairline */
+  .wf-hr{border:none;border-top:1.5px solid var(--line);margin:14px 0}
+  .wf-hr.wf-soft{border-top-style:dashed;border-color:var(--line-soft)}
+
+  /* Coral spray markers */
+  .wf-mark{background:linear-gradient(transparent 50%, #ff5a1f44 50%);padding:0 2px}
+  .wf-mark.wf-y{background:linear-gradient(transparent 50%, #ffd23a88 50%)}
+
+  /* Tiny "annotation" label, like a pen note */
+  .wf-note{position:absolute;font-family:'Caveat',cursive;font-size:15px;color:var(--accent);transform:rotate(-2deg);pointer-events:none;line-height:1.05}
+  .wf-note svg{display:block;margin-top:2px}
+
+  /* Top "browser" chrome */
+  .wf-chrome{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1.5px solid var(--line);background:var(--paper-2)}
+  .wf-chrome .wf-dots{display:flex;gap:5px}
+  .wf-chrome .wf-dots i{width:9px;height:9px;border-radius:50%;border:1.2px solid var(--line);background:var(--paper);display:block}
+  .wf-chrome .wf-url{flex:1;padding:4px 10px;border:1.2px solid var(--line);border-radius:999px;font-family:'Geist Mono',monospace;font-size:11px;color:var(--ink-mid);background:var(--paper)}
+
+  /* Progress bar */
+  .wf-bar{height:8px;border:1.5px solid var(--line);border-radius:99px;background:var(--paper-2);overflow:hidden}
+  .wf-bar > i{display:block;height:100%;background:var(--accent)}
+
+  /* SVG scribbles */
+  .wf-scribble{stroke:var(--accent);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .wf-scribble-ink{stroke:var(--ink);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+  /* Sidebar nav style block */
+  .wf-nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;color:var(--ink-soft);font-weight:500}
+  .wf-nav-item.wf-on{background:var(--ink);color:var(--paper)}
+  .wf-nav-item .wf-ic{width:18px;height:18px;border:1.5px solid currentColor;border-radius:4px;flex:0 0 auto}
+
+  /* Faux input */
+  .wf-input{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1.5px solid var(--line);border-radius:6px;background:var(--paper);font-size:13px;color:var(--ink-mid)}
+  .wf-input.wf-soft{border-color:var(--line-soft)}
+
+  /* Stack helpers */
+  .wf-stack{display:flex;flex-direction:column}
+  .wf-row{display:flex}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="shared.jsx"></script>
+<script type="text/babel" src="screens-landing.jsx"></script>
+<script type="text/babel" src="screens-auth.jsx"></script>
+<script type="text/babel" src="screens-feed.jsx"></script>
+<script type="text/babel" src="screens-post.jsx"></script>
+<script type="text/babel" src="screens-courses.jsx"></script>
+<script type="text/babel" src="screens-player.jsx"></script>
+<script type="text/babel" src="screens-leaderboard.jsx"></script>
+<script type="text/babel" src="screens-profile.jsx"></script>
+<script type="text/babel" src="screens-events.jsx"></script>
+<script type="text/babel" src="screens-pricing.jsx"></script>
+<script type="text/babel" src="screens-notifications.jsx"></script>
+<script type="text/babel" src="screens-onboarding.jsx"></script>
+<script type="text/babel" src="app.jsx"></script>
+</body>
+</html>

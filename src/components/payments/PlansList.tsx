@@ -18,7 +18,7 @@ export function PlansList({ orgId, orgSlug }: PlansListProps) {
   if (isLoading) {
     return (
       <div className="flex justify-center py-12">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        <Loader2 className="size-6 animate-spin text-ink-low" />
       </div>
     )
   }

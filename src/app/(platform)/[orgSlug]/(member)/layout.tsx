@@ -30,7 +30,7 @@ export default async function MemberLayout({ children, params }: Props) {
   const [membershipRes, profileRes] = await Promise.all([
     supabase
       .from("memberships")
-      .select("role, status")
+      .select("role, status, points, level")
       .eq("user_id", user.id)
       .eq("org_id", org.id)
       .single(),
@@ -49,7 +49,7 @@ export default async function MemberLayout({ children, params }: Props) {
   }
 
   return (
-    <div className="flex min-h-dvh">
+    <div className="flex min-h-dvh bg-background">
       <Sidebar
         orgSlug={orgSlug}
         orgName={org.name}
@@ -65,8 +65,10 @@ export default async function MemberLayout({ children, params }: Props) {
           fullName={profile?.full_name ?? null}
           avatarUrl={profile?.avatar_url ?? null}
           userId={user.id}
+          points={membership.points ?? 0}
+          level={membership.level ?? 1}
         />
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">{children}</main>
       </div>
     </div>
   )

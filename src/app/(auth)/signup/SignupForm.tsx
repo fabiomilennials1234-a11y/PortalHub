@@ -5,7 +5,6 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
 import { signup, signInWithOAuth } from "@/actions/auth"
 import { Loader2 } from "lucide-react"
 
@@ -34,14 +33,15 @@ export function SignupForm() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <Button
+        type="button"
         variant="outline"
-        className="w-full"
+        className="w-full border-line bg-paper hover:border-ink-low hover:bg-paper-2"
         onClick={handleGoogle}
         disabled={pending}
       >
-        <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+        <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24" aria-hidden>
           <path
             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
             fill="#4285F4"
@@ -59,64 +59,78 @@ export function SignupForm() {
             fill="#EA4335"
           />
         </svg>
-        Continuar com Google
+        <span className="font-medium">Continuar com Google</span>
       </Button>
 
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <Separator className="w-full" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">ou</span>
-        </div>
+      <div className="flex items-center gap-3">
+        <div className="h-px flex-1 bg-line-soft" />
+        <span className="wf-mono text-ink-low">ou</span>
+        <div className="h-px flex-1 bg-line-soft" />
       </div>
 
-      <form action={handleSignup} className="space-y-3">
+      <form action={handleSignup} className="space-y-4">
         <div className="space-y-1.5">
-          <Label htmlFor="full_name">Nome completo</Label>
+          <Label htmlFor="full_name" className="wf-mono">
+            Nome completo
+          </Label>
           <Input
             id="full_name"
             name="full_name"
             placeholder="Seu nome"
             required
+            autoComplete="name"
           />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" className="wf-mono">
+            Email de trabalho
+          </Label>
           <Input
             id="email"
             name="email"
             type="email"
-            placeholder="voce@email.com"
+            placeholder="voce@trabalho.com"
             required
+            autoComplete="email"
           />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="password">Senha</Label>
+          <Label htmlFor="password" className="wf-mono">
+            Senha
+          </Label>
           <Input
             id="password"
             name="password"
             type="password"
-            placeholder="••••••••"
+            placeholder="minimo 6 caracteres"
             required
             minLength={6}
+            autoComplete="new-password"
           />
         </div>
         {error && (
-          <p className="text-sm text-destructive">{error}</p>
+          <p className="border-l-2 border-destructive pl-3 font-serif text-[13.5px] italic text-destructive">
+            {error}
+          </p>
         )}
         <Button type="submit" className="w-full" disabled={pending}>
           {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Criar conta
         </Button>
+        <p className="wf-mono text-center text-ink-low">
+          ao criar, voce aceita os termos e a politica de privacidade
+        </p>
       </form>
 
-      <p className="text-center text-sm text-muted-foreground">
-        Já tem conta?{" "}
-        <Link href="/login" className="font-medium text-foreground hover:underline">
+      <div className="border-t border-line-faint pt-5 text-center font-serif text-[14px] text-ink-soft">
+        Ja tem conta?{" "}
+        <Link
+          href="/login"
+          className="font-medium text-foreground underline-offset-4 hover:text-gold-dk hover:underline"
+        >
           Entrar
         </Link>
-      </p>
+      </div>
     </div>
   )
 }

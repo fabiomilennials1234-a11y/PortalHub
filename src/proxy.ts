@@ -5,7 +5,7 @@ const AUTH_ROUTES = ["/login", "/signup"]
 const PUBLIC_PREFIXES = ["/api/", "/auth/"]
 const PUBLIC_PATHS = new Set(["/", "/pricing", "/robots.txt", "/sitemap.xml"])
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { response, user } = await updateSession(request)
   const { pathname } = request.nextUrl
 

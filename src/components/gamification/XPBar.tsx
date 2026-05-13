@@ -13,13 +13,14 @@ export function XPBar({
 }: XPBarProps) {
   if (nextLevelPoints === null) {
     return (
-      <div
-        className={cn("flex items-center gap-2 text-xs text-muted-foreground", className)}
-      >
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
-          <div className="h-full w-full bg-gradient-to-r from-amber-400 to-rose-400" />
+      <div className={cn("space-y-1.5", className)}>
+        <div className="h-1.5 w-full overflow-hidden rounded-[2px] border border-line bg-paper-2">
+          <div className="h-full w-full bg-gold" />
         </div>
-        <span className="shrink-0 tabular-nums">MAX</span>
+        <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.08em] text-ink-mid tabular-nums">
+          <span>{currentPoints.toLocaleString("pt-BR")} creditos</span>
+          <span>tier maximo</span>
+        </div>
       </div>
     )
   }
@@ -31,16 +32,20 @@ export function XPBar({
   const remaining = Math.max(nextLevelPoints - currentPoints, 0)
 
   return (
-    <div className={cn("space-y-1", className)}>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+    <div className={cn("space-y-1.5", className)}>
+      <div className="h-1.5 w-full overflow-hidden rounded-[2px] border border-line bg-paper-2">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-primary to-primary/60 transition-all duration-500"
+          className="h-full bg-gold transition-all duration-500"
           style={{ width: `${percent}%` }}
         />
       </div>
-      <div className="flex items-center justify-between text-[10px] text-muted-foreground tabular-nums">
-        <span>{currentPoints.toLocaleString("pt-BR")} pts</span>
-        <span>{remaining > 0 ? `${remaining.toLocaleString("pt-BR")} pra próximo nível` : "MAX"}</span>
+      <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.08em] text-ink-mid tabular-nums">
+        <span>{currentPoints.toLocaleString("pt-BR")} creditos</span>
+        <span>
+          {remaining > 0
+            ? `${remaining.toLocaleString("pt-BR")} pro proximo tier`
+            : "tier maximo"}
+        </span>
       </div>
     </div>
   )

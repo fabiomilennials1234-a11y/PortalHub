@@ -15,19 +15,15 @@ export function VideoEmbed({ url, title = "Vídeo" }: VideoEmbedProps) {
 
   if (!embedUrl) {
     return (
-      <div className="flex aspect-video items-center justify-center rounded-lg bg-muted">
-        <p className="text-sm text-muted-foreground">
-          URL de vídeo inválida
-        </p>
+      <div className="wf-box flex aspect-video items-center justify-center bg-paper-2">
+        <span className="wf-mono !text-ink-mid">URL DE VÍDEO INVÁLIDA</span>
       </div>
     )
   }
 
   return (
-    <div className="relative aspect-video overflow-hidden rounded-lg bg-muted">
-      {!loaded && (
-        <Skeleton className="absolute inset-0" />
-      )}
+    <div className="wf-box relative aspect-video overflow-hidden bg-[oklch(0.18_0.022_250)]">
+      {!loaded && <Skeleton className="absolute inset-0 rounded-none" />}
       <iframe
         src={embedUrl}
         title={title}

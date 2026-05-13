@@ -1,9 +1,8 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { useEnrollment } from "@/hooks/useEnrollment"
-import { Loader2, Play, CheckCircle2 } from "lucide-react"
+import { Loader2, Play, Check } from "lucide-react"
 
 interface EnrollButtonProps {
   courseId: string
@@ -23,11 +22,11 @@ export function EnrollButton({ courseId }: EnrollButtonProps) {
 
   if (isCompleted) {
     return (
-      <div className="flex items-center gap-2">
-        <Badge variant="secondary" className="gap-1">
-          <CheckCircle2 className="size-3" />
-          Concluído
-        </Badge>
+      <div className="flex items-center gap-3">
+        <span className="wf-pill wf-pill--gold">
+          <Check className="size-3" strokeWidth={2.5} />
+          CONCLUÍDO
+        </span>
         <Button variant="outline" size="sm">
           <Play className="size-3.5" />
           Revisitar

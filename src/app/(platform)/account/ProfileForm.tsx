@@ -44,10 +44,13 @@ export function ProfileForm({
     })
   }
 
+  const labelClass =
+    "font-mono text-[11px] uppercase tracking-[0.08em] text-ink-mid"
+
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <Label>Foto de perfil</Label>
+        <Label className={labelClass}>Foto de perfil</Label>
         <div className="max-w-[200px]">
           <ImageUpload
             bucket="avatars"
@@ -60,7 +63,9 @@ export function ProfileForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="name">Nome completo</Label>
+        <Label htmlFor="name" className={labelClass}>
+          Nome completo
+        </Label>
         <Input
           id="name"
           value={fullName}
@@ -72,7 +77,9 @@ export function ProfileForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="bio">Bio</Label>
+        <Label htmlFor="bio" className={labelClass}>
+          Bio
+        </Label>
         <Textarea
           id="bio"
           value={bio}
@@ -83,16 +90,13 @@ export function ProfileForm({
           rows={3}
           placeholder="Conte um pouco sobre você..."
         />
-        <p className="text-[10px] text-muted-foreground tabular-nums">
+        <p className="font-mono text-[10px] tabular-nums text-ink-low">
           {bio.length}/500
         </p>
       </div>
 
       <div className="flex items-center gap-2">
-        <Button
-          onClick={handleSave}
-          disabled={isPending || !fullName.trim()}
-        >
+        <Button onClick={handleSave} disabled={isPending || !fullName.trim()}>
           {isPending ? (
             <Loader2 className="size-4 animate-spin" />
           ) : saved ? (

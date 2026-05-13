@@ -37,8 +37,15 @@ export default async function NewCoursePage({ params }: Props) {
   }
 
   return (
-    <div className="mx-auto max-w-xl space-y-6">
-      <h1 className="font-heading text-lg font-semibold">Novo Curso</h1>
+    <div className="mx-auto w-full max-w-2xl space-y-8">
+      <header className="space-y-3 border-b border-line-soft pb-6">
+        <span className="wf-mono">CATÁLOGO · NOVO</span>
+        <h1 className="wf-hand text-[36px]">Novo Curso</h1>
+        <p className="text-[13.5px] leading-[1.6] text-ink-mid">
+          Comece pelo título — descrição, módulos e aulas podem ser adicionados
+          depois.
+        </p>
+      </header>
       <CourseForm orgId={org.id} orgSlug={orgSlug} />
     </div>
   )

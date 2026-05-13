@@ -25,10 +25,24 @@ interface RichTextEditorProps {
   className?: string
 }
 
+const PROSE_CLASSES = [
+  "prose prose-sm max-w-none focus:outline-none",
+  "prose-headings:font-serif prose-headings:tracking-tight prose-headings:text-foreground",
+  "prose-p:text-ink-soft prose-p:leading-relaxed",
+  "prose-strong:text-foreground prose-strong:font-medium",
+  "prose-em:text-foreground",
+  "prose-blockquote:border-l-2 prose-blockquote:border-gold prose-blockquote:pl-3 prose-blockquote:italic prose-blockquote:font-serif prose-blockquote:text-ink-soft prose-blockquote:not-italic",
+  "prose-code:bg-paper-2 prose-code:rounded-sm prose-code:px-1 prose-code:py-px prose-code:font-mono prose-code:text-[12.5px] prose-code:text-foreground prose-code:before:hidden prose-code:after:hidden",
+  "prose-pre:bg-paper-2 prose-pre:border prose-pre:border-line prose-pre:text-ink",
+  "prose-a:text-gold-dk prose-a:no-underline hover:prose-a:underline",
+  "prose-li:text-ink-soft prose-li:marker:text-ink-low",
+  "prose-hr:border-line-soft",
+].join(" ")
+
 export function RichTextEditor({
   content,
   onChange,
-  placeholder = "Escreva algo...",
+  placeholder = "Escreva algo…",
   minimal = false,
   className,
 }: RichTextEditorProps) {
@@ -49,8 +63,9 @@ export function RichTextEditor({
     editorProps: {
       attributes: {
         class: cn(
-          "prose prose-sm dark:prose-invert max-w-none focus:outline-none min-h-[80px] px-3 py-2",
-          minimal && "min-h-[60px]",
+          PROSE_CLASSES,
+          "px-4 py-3",
+          minimal ? "min-h-[80px]" : "min-h-[200px]",
         ),
       },
     },
@@ -58,20 +73,27 @@ export function RichTextEditor({
 
   if (!editor) return null
 
+  const toolBtn = (active: boolean) =>
+    cn(
+      "h-7 w-7 rounded-sm text-ink-mid transition-colors hover:bg-paper hover:text-foreground",
+      active && "bg-paper text-foreground ring-1 ring-line",
+    )
+
   return (
     <div
       className={cn(
-        "rounded-lg border border-input bg-background ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+        "wf-box overflow-hidden bg-paper-2 transition-colors focus-within:border-ink-low",
         className,
       )}
     >
-      <div className="flex flex-wrap gap-0.5 border-b border-border p-1">
+      <div className="flex flex-wrap items-center gap-0.5 border-b border-line-soft bg-paper-2 px-2 py-1.5">
         <Button
           type="button"
           variant="ghost"
           size="icon-xs"
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={cn(editor.isActive("bold") && "bg-muted")}
+          className={toolBtn(editor.isActive("bold"))}
+          aria-label="bold"
         >
           <Bold />
         </Button>
@@ -80,16 +102,19 @@ export function RichTextEditor({
           variant="ghost"
           size="icon-xs"
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={cn(editor.isActive("italic") && "bg-muted")}
+          className={toolBtn(editor.isActive("italic"))}
+          aria-label="italic"
         >
           <Italic />
         </Button>
+        <span className="mx-1 h-4 w-px bg-line-soft" />
         <Button
           type="button"
           variant="ghost"
           size="icon-xs"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={cn(editor.isActive("bulletList") && "bg-muted")}
+          className={toolBtn(editor.isActive("bulletList"))}
+          aria-label="bullet list"
         >
           <List />
         </Button>
@@ -98,12 +123,14 @@ export function RichTextEditor({
           variant="ghost"
           size="icon-xs"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={cn(editor.isActive("orderedList") && "bg-muted")}
+          className={toolBtn(editor.isActive("orderedList"))}
+          aria-label="ordered list"
         >
           <ListOrdered />
         </Button>
         {!minimal && (
           <>
+            <span className="mx-1 h-4 w-px bg-line-soft" />
             <Button
               type="button"
               variant="ghost"
@@ -111,9 +138,8 @@ export function RichTextEditor({
               onClick={() =>
                 editor.chain().focus().toggleHeading({ level: 2 }).run()
               }
-              className={cn(
-                editor.isActive("heading", { level: 2 }) && "bg-muted",
-              )}
+              className={toolBtn(editor.isActive("heading", { level: 2 }))}
+              aria-label="heading"
             >
               <Heading2 />
             </Button>
@@ -122,7 +148,8 @@ export function RichTextEditor({
               variant="ghost"
               size="icon-xs"
               onClick={() => editor.chain().focus().toggleBlockquote().run()}
-              className={cn(editor.isActive("blockquote") && "bg-muted")}
+              className={toolBtn(editor.isActive("blockquote"))}
+              aria-label="quote"
             >
               <Quote />
             </Button>
@@ -131,19 +158,22 @@ export function RichTextEditor({
               variant="ghost"
               size="icon-xs"
               onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-              className={cn(editor.isActive("codeBlock") && "bg-muted")}
+              className={toolBtn(editor.isActive("codeBlock"))}
+              aria-label="code"
             >
               <Code />
             </Button>
           </>
         )}
-        <div className="ml-auto flex gap-0.5">
+        <div className="ml-auto flex items-center gap-0.5">
           <Button
             type="button"
             variant="ghost"
             size="icon-xs"
             onClick={() => editor.chain().focus().undo().run()}
             disabled={!editor.can().undo()}
+            className={toolBtn(false)}
+            aria-label="undo"
           >
             <Undo />
           </Button>
@@ -153,12 +183,16 @@ export function RichTextEditor({
             size="icon-xs"
             onClick={() => editor.chain().focus().redo().run()}
             disabled={!editor.can().redo()}
+            className={toolBtn(false)}
+            aria-label="redo"
           >
             <Redo />
           </Button>
         </div>
       </div>
-      <EditorContent editor={editor} />
+      <div className="bg-paper">
+        <EditorContent editor={editor} />
+      </div>
     </div>
   )
 }

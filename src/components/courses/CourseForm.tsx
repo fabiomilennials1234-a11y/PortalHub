@@ -52,9 +52,11 @@ export function CourseForm({ orgId, orgSlug, course }: CourseFormProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="wf-box space-y-6 bg-paper p-6">
       <div className="space-y-2">
-        <Label htmlFor="course-title">Título</Label>
+        <Label htmlFor="course-title" className="wf-mono">
+          TÍTULO
+        </Label>
         <Input
           id="course-title"
           value={title}
@@ -64,7 +66,9 @@ export function CourseForm({ orgId, orgSlug, course }: CourseFormProps) {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="course-slug">Slug (URL)</Label>
+        <Label htmlFor="course-slug" className="wf-mono">
+          SLUG (URL)
+        </Label>
         <Input
           id="course-slug"
           value={slug}
@@ -76,7 +80,9 @@ export function CourseForm({ orgId, orgSlug, course }: CourseFormProps) {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="course-description">Descrição</Label>
+        <Label htmlFor="course-description" className="wf-mono">
+          DESCRIÇÃO
+        </Label>
         <Textarea
           id="course-description"
           value={description}
@@ -87,14 +93,16 @@ export function CourseForm({ orgId, orgSlug, course }: CourseFormProps) {
           rows={4}
         />
       </div>
-      <Button onClick={handleSubmit} disabled={isPending || !title.trim()}>
-        {isPending ? (
-          <Loader2 className="size-4 animate-spin" />
-        ) : (
-          <Save className="size-4" />
-        )}
-        {course ? "Salvar alterações" : "Criar curso"}
-      </Button>
+      <div className="border-t border-line-soft pt-4">
+        <Button onClick={handleSubmit} disabled={isPending || !title.trim()}>
+          {isPending ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <Save className="size-4" />
+          )}
+          {course ? "Salvar alterações" : "Criar curso"}
+        </Button>
+      </div>
     </div>
   )
 }

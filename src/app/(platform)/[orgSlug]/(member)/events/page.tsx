@@ -61,10 +61,24 @@ export default async function EventsPage({ params }: Props) {
     fetchEvents(org.id, "ended"),
   ])
 
+  const now = new Date()
+  const monthLabel = new Intl.DateTimeFormat("pt-BR", {
+    month: "long",
+    year: "numeric",
+  })
+    .format(now)
+    .toLowerCase()
+
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="font-heading text-lg font-semibold">Eventos</h1>
+    <div className="mx-auto w-full max-w-6xl space-y-8">
+      <header className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-6">
+        <div className="space-y-2">
+          <p className="wf-mono">Agenda da comunidade</p>
+          <h1 className="font-serif text-[32px] font-semibold leading-none tracking-tight text-foreground">
+            Eventos
+          </h1>
+          <p className="wf-mono">{monthLabel}</p>
+        </div>
         {isModerator && (
           <Link
             className={buttonVariants({ size: "default" })}
@@ -74,9 +88,9 @@ export default async function EventsPage({ params }: Props) {
             Novo evento
           </Link>
         )}
-      </div>
+      </header>
 
-      <Tabs defaultValue="upcoming" className="space-y-4">
+      <Tabs defaultValue="upcoming" className="space-y-6">
         <TabsList>
           <TabsTrigger value="upcoming">
             Próximos ({upcoming.length})
@@ -102,7 +116,7 @@ export default async function EventsPage({ params }: Props) {
 
         <TabsContent value="past">
           {past.length === 0 ? (
-            <p className="py-8 text-center text-xs text-muted-foreground">
+            <p className="py-10 text-center font-mono text-[11px] uppercase tracking-[0.06em] text-ink-mid">
               Nenhum evento passado.
             </p>
           ) : (
@@ -114,7 +128,6 @@ export default async function EventsPage({ params }: Props) {
           )}
         </TabsContent>
       </Tabs>
-
     </div>
   )
 }

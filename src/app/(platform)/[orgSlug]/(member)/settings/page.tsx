@@ -37,9 +37,23 @@ export default async function SettingsPage({ params }: Props) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl space-y-6">
-      <h1 className="text-2xl font-bold tracking-tight">Configurações</h1>
-      <OrgSettingsForm org={org} />
+    <div className="mx-auto w-full max-w-3xl space-y-8">
+      <header className="space-y-2 border-b border-line pb-6">
+        <p className="wf-mono">Organização · admin</p>
+        <h1 className="font-serif text-[32px] font-semibold leading-none tracking-tight text-foreground">
+          Configurações
+        </h1>
+        <p className="wf-mono">o que os membros veem da sua comunidade</p>
+      </header>
+      <section className="wf-box space-y-4 p-6">
+        <div className="space-y-1 border-b border-line-soft pb-4">
+          <h2 className="font-serif text-[18px] font-semibold text-foreground">
+            Identidade
+          </h2>
+          <p className="wf-mono">Nome, descrição e logo da organização</p>
+        </div>
+        <OrgSettingsForm org={org} />
+      </section>
     </div>
   )
 }

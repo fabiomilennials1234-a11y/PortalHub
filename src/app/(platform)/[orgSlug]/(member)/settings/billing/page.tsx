@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
 import { notFound, redirect } from "next/navigation"
-import { Separator } from "@/components/ui/separator"
 import { SubscriptionStatus } from "@/components/payments/SubscriptionStatus"
 import { PaymentHistory } from "@/components/payments/PaymentHistory"
 
@@ -28,19 +27,26 @@ export default async function BillingPage({ params }: Props) {
   if (!org) notFound()
 
   return (
-    <div className="mx-auto w-full max-w-3xl space-y-6">
-      <h1 className="font-heading text-lg font-semibold">Cobrança</h1>
+    <div className="mx-auto w-full max-w-3xl space-y-8">
+      <header className="space-y-2 border-b border-line pb-6">
+        <p className="wf-mono">Faturamento · Stripe</p>
+        <h1 className="font-serif text-[32px] font-semibold leading-none tracking-tight text-foreground">
+          Cobrança
+        </h1>
+        <p className="wf-mono">assinaturas e pagamentos da organização</p>
+      </header>
 
       <SubscriptionStatus orgId={org.id} orgSlug={orgSlug} />
 
-      <Separator />
-
-      <div className="space-y-3">
-        <h2 className="font-heading text-sm font-semibold">
-          Histórico de pagamentos
-        </h2>
+      <section className="space-y-4">
+        <div className="flex items-baseline justify-between border-b border-line-soft pb-2">
+          <h2 className="font-serif text-[18px] font-semibold text-foreground">
+            Histórico de pagamentos
+          </h2>
+          <p className="wf-mono">cronológico</p>
+        </div>
         <PaymentHistory orgId={org.id} />
-      </div>
+      </section>
     </div>
   )
 }

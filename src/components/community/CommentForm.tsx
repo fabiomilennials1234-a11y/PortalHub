@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { Button } from "@/components/ui/button"
 import { RichTextEditor } from "@/components/shared/RichTextEditor"
 import { createComment } from "@/actions/comments"
-import { Send } from "lucide-react"
+import { Loader2 } from "lucide-react"
 
 interface CommentFormProps {
   postId: string
@@ -42,27 +42,41 @@ export function CommentForm({
   }
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       <RichTextEditor
         content={body}
         onChange={setBody}
-        placeholder="Escreva um comentário..."
+        placeholder={
+          parentId ? "Responda com algo util…" : "Comente algo util — quanto mais util, mais creditos"
+        }
         minimal
       />
-      <div className="flex items-center justify-end gap-2">
-        {onCancel && (
-          <Button variant="ghost" size="sm" onClick={onCancel}>
-            Cancelar
+      <div className="flex items-center justify-between gap-2">
+        <span className="wf-mono text-ink-low">
+          quanto mais util · mais creditos
+        </span>
+        <div className="flex items-center gap-2">
+          {onCancel && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={onCancel}
+              className="wf-mono"
+            >
+              cancelar
+            </Button>
+          )}
+          <Button
+            type="button"
+            size="sm"
+            onClick={handleSubmit}
+            disabled={isPending || !body}
+          >
+            {isPending && <Loader2 className="mr-1 h-3 w-3 animate-spin" />}
+            {parentId ? "Responder" : "Publicar"}
           </Button>
-        )}
-        <Button
-          size="sm"
-          onClick={handleSubmit}
-          disabled={isPending || !body}
-        >
-          <Send className="size-3.5" />
-          Enviar
-        </Button>
+        </div>
       </div>
     </div>
   )

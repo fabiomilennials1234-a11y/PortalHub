@@ -21,13 +21,20 @@ export default async function PricingPage({ params }: Props) {
   if (!org) notFound()
 
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-8">
-      <div className="space-y-2 text-center">
-        <h1 className="font-heading text-2xl font-bold">Planos</h1>
-        <p className="text-sm text-muted-foreground">
-          Escolha o plano ideal pra você em {org.name}.
+    <div className="mx-auto w-full max-w-6xl space-y-12 py-4">
+      <header className="space-y-5 text-center">
+        <span className="wf-pill wf-pill--gold inline-flex text-[10px] uppercase tracking-[0.08em]">
+          Preços honestos · sem trial enganador
+        </span>
+        <h1 className="font-serif text-[48px] font-semibold leading-[1.05] tracking-tight text-foreground sm:text-[64px]">
+          Comece <span className="wf-underline">grátis</span>.
+          <br />
+          Pague quando crescer.
+        </h1>
+        <p className="mx-auto max-w-xl font-mono text-[11px] uppercase tracking-[0.08em] text-ink-mid">
+          Planos disponíveis em {org.name}
         </p>
-      </div>
+      </header>
 
       <PlansList orgId={org.id} orgSlug={orgSlug} />
     </div>

@@ -5,7 +5,7 @@ import { StatsCard } from "@/components/gamification/StatsCard"
 import { AchievementCard } from "@/components/gamification/AchievementCard"
 import { ActivityFeed } from "@/components/gamification/ActivityFeed"
 import { useAchievements } from "@/hooks/useAchievements"
-import { Loader2, Trophy } from "lucide-react"
+import { Loader2 } from "lucide-react"
 
 interface ProfileGameSectionProps {
   orgId: string
@@ -23,25 +23,26 @@ export function ProfileGameSection({ orgId, userId }: ProfileGameSectionProps) {
 
       <TabsContent value="achievements" className="space-y-3">
         {isLoading ? (
-          <div className="flex justify-center py-8">
-            <Loader2 className="size-5 animate-spin text-muted-foreground" />
+          <div className="flex justify-center py-12">
+            <Loader2 className="size-5 animate-spin text-ink-low" />
           </div>
         ) : !achievements || achievements.length === 0 ? (
-          <div className="flex flex-col items-center gap-2 py-8 text-center">
-            <Trophy className="size-8 text-muted-foreground/50" />
-            <p className="text-sm text-muted-foreground">
-              Nenhuma conquista cadastrada nesta organização.
-            </p>
+          <div className="wf-box py-12 text-center font-mono text-[11px] uppercase tracking-[0.08em] text-ink-mid">
+            nenhuma conquista cadastrada nesta organizacao
           </div>
         ) : (
-          achievements.map((a) => (
-            <AchievementCard key={a.id} achievement={a} />
-          ))
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {achievements.map((a) => (
+              <AchievementCard key={a.id} achievement={a} />
+            ))}
+          </div>
         )}
       </TabsContent>
 
       <TabsContent value="activity">
-        <ActivityFeed orgId={orgId} userId={userId} limit={50} />
+        <div className="wf-box px-4 py-2">
+          <ActivityFeed orgId={orgId} userId={userId} limit={50} />
+        </div>
       </TabsContent>
     </>
   )

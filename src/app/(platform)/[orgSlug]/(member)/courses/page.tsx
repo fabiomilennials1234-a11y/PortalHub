@@ -41,14 +41,32 @@ export default async function CoursesPage({ params }: Props) {
     )
   }
 
+  const totalLessons = typedCourses.reduce(
+    (acc, c) => acc + (c.total_lessons ?? 0),
+    0,
+  )
+
   return (
-    <div className="space-y-6">
-      <h1 className="font-heading text-lg font-semibold">Cursos</h1>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {typedCourses.map((course) => (
-          <CourseCard key={course.id} course={course} orgSlug={orgSlug} />
-        ))}
-      </div>
+    <div className="space-y-8">
+      {/* Editorial header */}
+      <header className="space-y-3 border-b border-line-soft pb-6">
+        <span className="wf-mono">CATÁLOGO</span>
+        <h1 className="wf-hand text-[42px] sm:text-[48px]">Cursos</h1>
+        <p className="wf-mono">
+          {typedCourses.length}{" "}
+          {typedCourses.length === 1 ? "CURSO" : "CURSOS"} · {totalLessons}{" "}
+          {totalLessons === 1 ? "AULA" : "AULAS"}
+        </p>
+      </header>
+
+      <section className="space-y-4">
+        <span className="wf-mono">TODOS OS CURSOS</span>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {typedCourses.map((course) => (
+            <CourseCard key={course.id} course={course} orgSlug={orgSlug} />
+          ))}
+        </div>
+      </section>
     </div>
   )
 }

@@ -40,9 +40,17 @@ export default async function NewEventPage({ params }: Props) {
   }
 
   return (
-    <div className="mx-auto max-w-xl space-y-6">
-      <h1 className="font-heading text-lg font-semibold">Novo Evento</h1>
-      <EventForm orgId={org.id} orgSlug={orgSlug} />
+    <div className="mx-auto max-w-xl space-y-8">
+      <header className="space-y-2 border-b border-line pb-6">
+        <p className="wf-mono">Criar agenda</p>
+        <h1 className="font-serif text-[32px] font-semibold leading-none tracking-tight text-foreground">
+          Novo evento
+        </h1>
+        <p className="wf-mono">defina o que sua comunidade vai viver</p>
+      </header>
+      <div className="wf-box p-6">
+        <EventForm orgId={org.id} orgSlug={orgSlug} />
+      </div>
     </div>
   )
 }

@@ -38,7 +38,7 @@ export function EventRSVPButton({ eventId }: EventRSVPButtonProps) {
 
   return (
     <Button
-      variant={isRegistered ? "secondary" : "default"}
+      variant={isRegistered ? "outline" : "default"}
       onClick={handleClick}
       disabled={isPending}
     >
@@ -49,7 +49,7 @@ export function EventRSVPButton({ eventId }: EventRSVPButtonProps) {
       ) : (
         <UserPlus className="size-4" />
       )}
-      {isRegistered ? "Inscrito" : "Inscrever-se"}
+      {isRegistered ? "Confirmado" : "Inscrever-se"}
     </Button>
   )
 }
