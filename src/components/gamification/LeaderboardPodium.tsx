@@ -17,9 +17,9 @@ interface PodiumSlotProps {
 }
 
 const HEIGHTS: Record<number, string> = {
-  1: "h-36",
-  2: "h-28",
-  3: "h-24",
+  1: "h-48 sm:h-56 lg:h-64",
+  2: "h-36 sm:h-44 lg:h-52",
+  3: "h-28 sm:h-36 lg:h-44",
 }
 
 const BAR_STYLES: Record<number, string> = {
@@ -39,7 +39,7 @@ function PodiumSlot({ entry, orgSlug }: PodiumSlotProps) {
         {isFirst && (
           <span
             aria-hidden
-            className="pointer-events-none absolute -top-6 left-1/2 -translate-x-1/2 -rotate-6 text-[28px] leading-none"
+            className="pointer-events-none absolute -top-7 left-1/2 -translate-x-1/2 -rotate-6 text-[32px] leading-none sm:-top-8 sm:text-[40px]"
           >
             👑
           </span>
@@ -48,7 +48,7 @@ function PodiumSlot({ entry, orgSlug }: PodiumSlotProps) {
           userId={entry.user_id}
           name={entry.profile.full_name}
           avatarUrl={entry.profile.avatar_url}
-          size={64}
+          size={isFirst ? 96 : 80}
           ringClassName={cn(
             "ring-2",
             isFirst ? "ring-gold" : "ring-ink",
@@ -56,10 +56,15 @@ function PodiumSlot({ entry, orgSlug }: PodiumSlotProps) {
         />
       </div>
 
-      <p className="mt-2 font-serif text-[20px] font-semibold tracking-[-0.005em] text-foreground transition-colors group-hover:text-gold-dk">
+      <p
+        className={cn(
+          "mt-3 font-serif font-semibold tracking-[-0.005em] text-foreground transition-colors group-hover:text-gold-dk",
+          isFirst ? "text-[22px] sm:text-[26px]" : "text-[18px] sm:text-[20px]",
+        )}
+      >
         {entry.profile.full_name ?? "Anonimo"}
       </p>
-      <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.08em] tabular-nums text-ink-mid">
+      <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.08em] tabular-nums text-ink-mid">
         {entry.points.toLocaleString("pt-BR")} cred.
       </p>
 
@@ -72,7 +77,10 @@ function PodiumSlot({ entry, orgSlug }: PodiumSlotProps) {
       >
         <span
           className={cn(
-            "font-serif text-[44px] font-semibold leading-none tabular-nums",
+            "font-serif font-semibold leading-none tabular-nums",
+            entry.rank === 1
+              ? "text-[60px] sm:text-[76px] lg:text-[96px]"
+              : "text-[44px] sm:text-[56px] lg:text-[72px]",
           )}
         >
           {entry.rank}
@@ -121,7 +129,7 @@ export function LeaderboardPodium({ orgId, orgSlug }: LeaderboardPodiumProps) {
       : top
 
   return (
-    <div className="grid grid-cols-3 items-end gap-4">
+    <div className="grid grid-cols-3 items-end gap-4 sm:gap-6 lg:gap-10">
       {ordered.map((entry) => (
         <PodiumSlot key={entry.user_id} entry={entry} orgSlug={orgSlug} />
       ))}
