@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { BookOpen } from "lucide-react"
 import { EmptyState } from "@/components/shared/EmptyState"
 import { CourseCard } from "@/components/courses/CourseCard"
+import { ContinueWatching } from "@/components/courses/ContinueWatching"
 import type { CourseWithAuthor } from "@/types/domain"
 
 export const metadata = { title: "Cursos" }
@@ -58,6 +59,8 @@ export default async function CoursesPage({ params }: Props) {
           {totalLessons === 1 ? "AULA" : "AULAS"}
         </p>
       </header>
+
+      <ContinueWatching orgId={org.id} orgSlug={orgSlug} />
 
       <section className="space-y-4">
         <span className="wf-mono">TODOS OS CURSOS</span>

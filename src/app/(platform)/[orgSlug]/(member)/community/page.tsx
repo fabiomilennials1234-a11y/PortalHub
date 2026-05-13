@@ -13,6 +13,11 @@ export default async function CommunityPage({ params }: Props) {
   const { orgSlug } = await params
   const supabase = await createClient()
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return null
+
   const { data: org } = await supabase
     .from("organizations")
     .select("id, name, description, banner_url, created_at")
@@ -20,6 +25,12 @@ export default async function CommunityPage({ params }: Props) {
     .single()
 
   if (!org) return null
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("full_name, avatar_url")
+    .eq("id", user.id)
+    .single()
 
   const todayStart = new Date()
   todayStart.setHours(0, 0, 0, 0)
@@ -82,6 +93,9 @@ export default async function CommunityPage({ params }: Props) {
             categories={categories}
             totalCount={totalCount}
             categoryCounts={categoryCounts}
+            currentUserId={user.id}
+            currentUserName={profile?.full_name ?? null}
+            currentUserAvatarUrl={profile?.avatar_url ?? null}
           />
         </main>
         <aside className="mt-6 hidden lg:mt-0 lg:block">

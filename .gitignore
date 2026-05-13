@@ -50,3 +50,7 @@ blob-report/
 # Supabase
 supabase/.temp/
 supabase/.branches/
+
+PortalHub.zip
+TypeCall.zip
+*.zip

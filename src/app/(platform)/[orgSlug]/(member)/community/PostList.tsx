@@ -7,7 +7,8 @@ import { usePosts } from "@/hooks/usePosts"
 import { PostCard } from "@/components/community/PostCard"
 import { PostCardSkeleton } from "@/components/community/PostCardSkeleton"
 import { CategoryFilter } from "@/components/community/CategoryFilter"
-import { PostForm } from "@/components/community/PostForm"
+import { Composer } from "@/components/community/Composer"
+import { PinnedGuidelinesCard } from "@/components/community/PinnedGuidelinesCard"
 import type { Category } from "@/types/database.types"
 
 interface PostListProps {
@@ -16,6 +17,9 @@ interface PostListProps {
   categories: Category[]
   totalCount?: number
   categoryCounts?: Record<string, number>
+  currentUserId: string
+  currentUserName: string | null
+  currentUserAvatarUrl: string | null
 }
 
 export function PostList({
@@ -24,6 +28,9 @@ export function PostList({
   categories,
   totalCount,
   categoryCounts,
+  currentUserId,
+  currentUserName,
+  currentUserAvatarUrl,
 }: PostListProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const {
@@ -59,16 +66,21 @@ export function PostList({
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <CategoryFilter
-          categories={categories}
-          selected={selectedCategory}
-          onSelect={setSelectedCategory}
-          counts={categoryCounts}
-          totalCount={totalCount}
-        />
-        <PostForm orgId={orgId} categories={categories} />
-      </div>
+      <CategoryFilter
+        categories={categories}
+        selected={selectedCategory}
+        onSelect={setSelectedCategory}
+        counts={categoryCounts}
+        totalCount={totalCount}
+      />
+
+      <Composer
+        orgId={orgId}
+        categories={categories}
+        userId={currentUserId}
+        fullName={currentUserName}
+        avatarUrl={currentUserAvatarUrl}
+      />
 
       {isLoading ? (
         <div className="space-y-3">
@@ -78,6 +90,7 @@ export function PostList({
         </div>
       ) : (
         <div className="space-y-3">
+          {posts.length > 0 && <PinnedGuidelinesCard orgSlug={orgSlug} />}
           <AnimatePresence mode="popLayout" initial={false}>
             {posts.map((post, i) => (
               <motion.div

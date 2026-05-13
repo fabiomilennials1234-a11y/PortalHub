@@ -1,27 +1,48 @@
 "use client"
 
 import { TabsContent } from "@/components/ui/tabs"
-import { StatsCard } from "@/components/gamification/StatsCard"
-import { AchievementCard } from "@/components/gamification/AchievementCard"
-import { ActivityFeed } from "@/components/gamification/ActivityFeed"
+import { AchievementBadge } from "@/components/gamification/AchievementBadge"
 import { useAchievements } from "@/hooks/useAchievements"
+import { cn } from "@/lib/utils"
 import { Loader2 } from "lucide-react"
+import { UserPostsTab } from "./UserPostsTab"
+import { UserCommentsTab } from "./UserCommentsTab"
+import { UserCoursesTab } from "./UserCoursesTab"
 
 interface ProfileGameSectionProps {
   orgId: string
+  orgSlug: string
   userId: string
 }
 
-export function ProfileGameSection({ orgId, userId }: ProfileGameSectionProps) {
+export function ProfileGameSection({
+  orgId,
+  orgSlug,
+  userId,
+}: ProfileGameSectionProps) {
   const { data: achievements, isLoading } = useAchievements(orgId, userId)
 
   return (
     <>
-      <TabsContent value="stats" className="space-y-4">
-        <StatsCard orgId={orgId} userId={userId} />
+      <TabsContent value="posts">
+        <div className="wf-box px-5 py-2">
+          <UserPostsTab orgId={orgId} orgSlug={orgSlug} userId={userId} />
+        </div>
       </TabsContent>
 
-      <TabsContent value="achievements" className="space-y-3">
+      <TabsContent value="comments">
+        <div className="wf-box px-5 py-2">
+          <UserCommentsTab orgSlug={orgSlug} userId={userId} />
+        </div>
+      </TabsContent>
+
+      <TabsContent value="courses">
+        <div className="wf-box px-5 py-4">
+          <UserCoursesTab orgId={orgId} orgSlug={orgSlug} userId={userId} />
+        </div>
+      </TabsContent>
+
+      <TabsContent value="badges">
         {isLoading ? (
           <div className="flex justify-center py-12">
             <Loader2 className="size-5 animate-spin text-ink-low" />
@@ -31,18 +52,34 @@ export function ProfileGameSection({ orgId, userId }: ProfileGameSectionProps) {
             nenhuma conquista cadastrada nesta organizacao
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {achievements.map((a) => (
-              <AchievementCard key={a.id} achievement={a} />
-            ))}
+          <div className="wf-box p-5">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {achievements.map((a) => (
+                <div
+                  key={a.id}
+                  className="flex flex-col items-center gap-2 text-center"
+                >
+                  <AchievementBadge
+                    type={a.type}
+                    earned={a.earned}
+                    size="lg"
+                  />
+                  <p
+                    className={cn(
+                      "line-clamp-2 font-serif text-[13px] font-medium leading-tight tracking-[-0.005em]",
+                      !a.earned && "text-ink-mid",
+                    )}
+                  >
+                    {a.name}
+                  </p>
+                  <p className="font-mono text-[9.5px] uppercase tracking-[0.08em] text-ink-low">
+                    {a.earned ? "conquistado" : "bloqueado"}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         )}
-      </TabsContent>
-
-      <TabsContent value="activity">
-        <div className="wf-box px-4 py-2">
-          <ActivityFeed orgId={orgId} userId={userId} limit={50} />
-        </div>
       </TabsContent>
     </>
   )

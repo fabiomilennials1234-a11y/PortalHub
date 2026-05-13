@@ -21,10 +21,24 @@ import type { Category } from "@/types/database.types"
 interface PostFormProps {
   orgId: string
   categories: Category[]
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+  hideTrigger?: boolean
 }
 
-export function PostForm({ orgId, categories }: PostFormProps) {
-  const [open, setOpen] = useState(false)
+export function PostForm({
+  orgId,
+  categories,
+  open: openProp,
+  onOpenChange,
+  hideTrigger = false,
+}: PostFormProps) {
+  const [openInternal, setOpenInternal] = useState(false)
+  const open = openProp ?? openInternal
+  const setOpen = (next: boolean) => {
+    if (onOpenChange) onOpenChange(next)
+    else setOpenInternal(next)
+  }
   const [title, setTitle] = useState("")
   const [body, setBody] = useState<unknown>(null)
   const [categoryId, setCategoryId] = useState("")
@@ -53,14 +67,16 @@ export function PostForm({ orgId, categories }: PostFormProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        render={
-          <Button className="gap-1.5 bg-ink text-paper hover:bg-ink-soft">
-            <Plus className="h-4 w-4" />
-            <span className="font-medium">Novo post</span>
-          </Button>
-        }
-      />
+      {!hideTrigger && (
+        <DialogTrigger
+          render={
+            <Button className="gap-1.5 bg-ink text-paper hover:bg-ink-soft">
+              <Plus className="h-4 w-4" />
+              <span className="font-medium">Novo post</span>
+            </Button>
+          }
+        />
+      )}
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader className="space-y-1">
           <span className="wf-mono">// novo post</span>
